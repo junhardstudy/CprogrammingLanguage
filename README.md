@@ -1,6 +1,6 @@
-### CprogrammingLanguage
-# 1. C/C++
+# CprogrammingLanguage
+### 1. C/C++
 
-# 2. Java
+### 2. Java
 
-# 3. Python
+### 3. Python
