@@ -1,2 +1,4 @@
 # CprogrammingLanguage
-C언어 프로그래밍
+1. C/C++
+2. Java
+3. Python
