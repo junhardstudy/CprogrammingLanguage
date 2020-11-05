@@ -88,6 +88,71 @@ readFrFile("menu.txt", &food, &bob, &gook, &banchan, &jjige, &bread_meal, &noodl
 menu.txt 파일을 읽어 들이고, 문자열내에 들어있는 특정 문자 패턴에 따라 밥, 국, 찌개, 반찬, 면을 분리하여 구조체 데이터에 저장하는 readFrFile()함수를 호출합니다.
 
 
+recently_food.bin 파일과 recently.bin파일은 최근에 프로그램을 실행시켰다면, 최근에 저장한 음식 데이터와 식단 데이터를 불러오게 됩니다.
+
+
+
+
+<br>
+<br>
+<br>
+
+```c
+	while(1){
+		if (not_draw_condition == 1) {
+			system("mode con:cols=142 lines=15");
+			drawSquare(2, 2);
+			gotoxy(1, 3);
+			printf("처음이신가요?");
+			gotoxy(1, 4);
+			printf("새로운 식단을 짜거나 자신의 체중에 맞는 권장 섭취 칼로리 식단을 짤 수 있습니다!");
+			gotoxy(1, 5);
+			printf("기존에 있는 식단을 불러오시려면 F4키, 새로운 식단을 짜시려면 F1 키를, 저칼로리 식단을 짜시려면 F2키를 눌러주세요^^7");
+
+		}
+		if (keyboard_value == 8 && not_draw_condition == 0) {
+			system("mode con:cols=143 lines=50");
+			index_right = 0;
+			drawTable(2, 2);
+			drawData(cal_meal, &index_right, &index_left);
+		}
+
+	
+		keyboard_value = getch();
+		
+	
+	
+		
+		if (keyboard_value == 224 ) {//화살표 키 누른 경우
+			keyboard_value = getch();
+			system("mode con:cols=143 lines=50");
+			if (not_draw_condition == 1)continue;//표현하고자 할 데이터가 없으면 화살표 입력을 받아도 무시하도록 설정
+			switch (keyboard_value) {
+			case 77:
+				system("cls");
+				drawTable(2, 2);
+				drawData(cal_meal, &index_right, &index_left);
+				//오른쪽
+				break;
+			case 75:
+				system("cls");
+				drawTable(2, 2);
+				drawData_left(cal_meal, &index_right, &index_left);
+				//왼쪽
+				break;
+			default: continue;
+
+			}
+		}
+
+```
+프로그램이 돌아가는 주요 부분입니다.
+
+전체 로직은 특정 종료조건을 만족하기 전까지는 무한루프를 돌면서 사용자의 입력을 받습니다.
+
+
+not_draw_condition이라는 flag 변수값을 통해서 사용자가 처음으로 프로그램을 실행했다면 recently.bin 파일이 없으므로 도움말을 화면에 표시해줍니다.
+
 
 
 
