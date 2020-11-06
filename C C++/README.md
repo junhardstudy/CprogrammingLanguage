@@ -435,6 +435,254 @@ if (strcmp(tmp->food_name, target) == 0)
 여기서 생성된 식단들은 링크드 리스트형식으로 관리됩니다.
 즉, 12월달에 생성된 각각의 일별 식단들이 링크드 리스트의 노드에 대응됩니다.
 
+자료구조 사진
+
+```c
+void storeData(struct food_category **food, struct food_category **bob, struct food_category **gook, struct food_category **jjige, struct food_category **banchan, struct food_category **bread_meal, struct food_category **noodle) {
+		NODE *tmp, *new_node, *new_node_sub;
+		
+		new_node = (NODE *)malloc(sizeof(NODE));
+		new_node->link = NULL;
+		tmp = *food;
+
+		scanf("%s%d%d", new_node->food_name, &(new_node->price), &(new_node->calorie));
+		
+		if (tmp == NULL) {
+			//빈 연결 리스트면 첫 번째 노드를 연결
+			*food = new_node;
+		}
+		else {
+			while (tmp->link != NULL) {
+				tmp = tmp->link;
+			}
+			tmp->link = new_node;
+		}
+			if (strstr(new_node->food_name, "밥") != NULL) {
+				tmp = *bob;
+				new_node_sub = (NODE *)malloc(sizeof(NODE));
+				new_node_sub->link = NULL;
+				strcpy(new_node_sub->food_name, new_node->food_name);
+				if (tmp == NULL) {
+					//빈 연결 리스트면 첫 번째 노드를 연결
+					*bob = new_node_sub;
+				}
+				else {
+					while (tmp->link != NULL) {
+						tmp = tmp->link;	
+					}
+					tmp->link = new_node_sub;
+				}
+			}
+			else if (strstr(new_node->food_name, "국수") != NULL) {
+				tmp = *noodle;
+				new_node_sub = (NODE *)malloc(sizeof(NODE));
+				new_node_sub->link = NULL;
+				strcpy(new_node_sub->food_name, new_node->food_name);
+				.
+				.
+				.
+```
+음식 데이터를 메모리상에 추가하고, 카테고리 별로 분류한다음, 링크드리스트로 구현하는 함수입니다.
+
+먼저 빈 링크드 리스트이면, food 구조체에 첫번째 노드를 생성합니다.
+
+빈 링크드 리스트가 아니라면, 분류를 한 다음 맞는 카테고리에 노드를 추가하게 됩니다.
+분류 작업은 strstr()함수를 이용하였으며, 각 음식의 특정 문자열 패턴을 찾도록 하였습니다.
+예를 들어, 잡곡밥, 현미밥, 율곡밥, 쌃밥등은 모두 밥 이라는 문자열 패턴을 지니고 있으므로 bob 카테고리에 추가하게됩니다.
+
+각각의 카테고리도 링크드 리스트이므로, 새로운 음식을 노드에 추가 하기위해서는 링크드리스트의 마지막 노드까지 검사를 하게 됩니다.
+해당 노드의 link멤버 변수가 null이라면, 마지막 노드이므로 새로운 음식데이터를 노드로 이어줍니다.
+
+카테고리 링크드 리스트 사진
+
+```c
+void input_data(struct meal *cal_meal, struct food_category *bob, struct food_category *gook, struct food_category *jjige, struct food_category *banchan, struct food_category *bread_meal, struct food_category *noodle)
+{
+	int i, j, k;//반복문 제어 변수
+	int percentage;//1, 2, 3식에 대하여 각각이 나올 확률
+	int tot;//3일 중복에 관한 제어 변수
+	int flag, compare_num;//3일 중복에 관한 제어 변수
+	
+	time_t current;
+	struct tm *cal_time;
+	current = time(NULL);
+	cal_time = localtime(&current);
+
+	for (i = 0; i < 365; i++) {
+		(cal_meal + i)->meal_calendary.year = cal_time->tm_year + 1900;
+		(cal_meal + i)->meal_calendary.month = cal_time->tm_mon + 1;
+		(cal_meal + i)->meal_calendary.day = cal_time->tm_mday;
+		(cal_meal + i)->meal_calendary.mday = cal_time->tm_wday;
+		current += 60 * 60 * 24;//하루 증가
+		cal_time = localtime(&current);
+
+		
+
+	}//날짜 data & 메뉴 개수 입력
+	
+	//일단 중복 조건 고려하지 않고 메뉴만 넣었을경우
+	for (i = 0; i < 365; i++) {
+
+		(cal_meal + i)->total_calories = 0;
+		while (1) {
+			percentage = rand() % 50;//1식이 20퍼센트 확률로 나오기 하기 위함
+			flag = 0;
+			if (percentage != 0) {
+				(cal_meal + i)->meal_num = rand() % 2 + 2;
+				switch ((cal_meal + i)->meal_num) {//3 또는 2식 짜는 부분
+				case 3:
+					if (rand() % 2 == 0) {
+						strcpy((cal_meal + i)->meal_menu[0], (food_name(bob)));
+						strcpy((cal_meal + i)->meal_menu[1], (food_name(gook)));
+						strcpy((cal_meal + i)->meal_menu[2], (food_name(banchan)));
+					}
+					else {
+						strcpy((cal_meal + i)->meal_menu[0], (food_name(bob)));
+						strcpy((cal_meal + i)->meal_menu[1], (food_name(jjige)));
+						strcpy((cal_meal + i)->meal_menu[2], (food_name(banchan)));
+
+					}
+
+					break;
+				case 2:
+					strcpy((cal_meal + i)->meal_menu[0], (food_name(bob)));
+					strcpy((cal_meal + i)->meal_menu[1], (food_name(jjige)));
+
+
+					break;
+				default:;
+					
+				}
+			}
+			else {//단일식 짜는 부분
+				(cal_meal + i)->meal_num = 1;
+				if (food_name_number(bread_meal) > 0 && food_name_number(noodle) > 0) {
+					switch (rand() % 2 + 1) {
+					case 1:strcpy((cal_meal + i)->meal_menu[0], (food_name(noodle)));
+						break;
+					case 2:strcpy((cal_meal + i)->meal_menu[0], (food_name(bread_meal)));
+						break;
+					default:;
+						
+					}
+				}
+				
+			}
+
+			/*********중복 메뉴 체크**********/
+
+			if (i == 0)break;
+
+			//3일전까지 비교
+			if (i == 1)compare_num = 2;//둘째날은 첫째날과 비교, 즉 하루만 비교하면됨
+			else if (i == 2)compare_num = 1;//따라서 셋째날은 이틀을 비교하면 됨
+			else compare_num = 0;//나머지는 3일 식단 중복이 안 나오게
+
+			for (tot = 1; tot <= 3 - compare_num; tot++) {
+				
+				for (j = 0; j < (cal_meal + i)->meal_num; j++) {
+					for (k = 0; k < (cal_meal + i - tot)->meal_num; k++) {
+						if (strcmp((cal_meal + i)->meal_menu[j], (cal_meal + i - tot)->meal_menu[k]) == 0)
+						{
+							flag = 1;//중복이 있음을 알려줄 변수
+							break;//중복 발견
+						}
+					}
+					if (flag == 1)break;//중복 발견
+
+				}
+				if (flag == 1)break;//결국 중복 발견
+				
+			}
+			if (flag == 0)break;//최종적으로 중복이 없음을 확인
+		}
+	}
+	for (i = 0; i < 365; i++) {
+		(cal_meal + i)->x = 2+ 20*(((cal_meal + i)->meal_calendary.day - 1) % 7);//하루 증가할때마다 x좌표값이 증가
+		(cal_meal + i)->y = 3 + 9 * (((cal_meal + i)->meal_calendary.day - 1) / 7);	//일주일 지날 때 마다 y좌표값이 하나 증가
+	}
+}
+```
+식단 데이터 meal구조체에 대해 멤버 변수(식단 년, 월, 일, 음식등)값을 초기화하고, 랜덤한 식단을 짜주는 함수입니다.
+
+식단 생성은 아래와 같은 요구사항을 만족해야 합니다.
+
+	1. 음식이 물리지 않도록 3일 내에는 같은 메뉴가 등장해서는 않된다.
+	
+	2. 1, 2, 또는 3식중에 하나를 생성해야 한다.
+	
+	3. 랜덤하게 생성해야 한다.
+	
+프로그램은 현재 컴퓨터의 local 시간을 따라야 하기 때문에 localtime() api함수를 이용하여 멤버들의 값을 입력하였습니다.
+
+기본적인 멤버 변수 설정이 끝나면 일단 중복 방지 조건을 고려하지 않고 랜덤하게 식단을 형성합니다. 1식은 20퍼센트 확률로 생성하기 위해 rand()함수를
+이용하였습니다.
+<br>
+<br>
+마지막 반복문은 중복을 제거하는 로직입니다.
+
+3일내에 중복이 발생되지 않도록 하기 위해 flag라는 변수를 사용하였습니다. 이는 로또 번호 난수 생성에서 아이디어를 가져왔습니다.
+즉 특정 날짜의 식단에 대해 중복검사를 시작하면, 하루 전날의 식단과 비교를 합니다. 만약 중복이 아니라면 그 다음으로 2일전과 비교를 하고 중복이 아니라면
+마지막으로 3일전과 비교를 합니다.
+
+이렇게 3일전까지 무사히 flag 변수가 0값을 유지하면 다음 날짜의 식단으로 검사를 하게 됩니다.
+
+만약, 1, 2, 또는 3일전에 중복이 하나라도 발견되면 flag 변수가 1이 되어 다시 랜덤한 식단을 짜고 중복 검사를 시행하게 됩니다. 
+
+```c
+void input_healthy_data(int std_calorie, struct meal *cal_meal, struct food_category *bob, struct food_category *gook, struct food_category *jjige, struct food_category *banchan, struct food_category *bread_meal, struct food_category *noodle)
+{
+.
+.
+.
+
+if (flag == 0 && ((cal_meal + i)->total_calories < std_calorie))break;
+```
+사용자의 표준 체중, 일일 활동량을 통해 저칼로리 식단을 짜주는 함수입니다.
+
+전체 로직은 랜덤식단을 짜주는 input_data()함수와 유사하나, 칼로리 조건이 추가되어 있습니다.
+
+```c
+void writeAtFile(char * filename, void *data, int switch_num) {
+	int i , j;
+	FILE *fp;
+	NODE *tmp;//음식 이름이면, 음식이름을 저장할 때 사용할 변수
+	struct meal *meal_tmp;//식단을 저장하고자 할 경우 사용할 변수
+
+	fp = fopen(filename, "wb");
+
+	if (switch_num == 1) {//음식 카테고리(연결 리스트)를 저장하고자 하는 경우
+		tmp = (NODE *)data;	
+		while (tmp != NULL) {			
+			fwrite(tmp, sizeof(NODE), 1, fp);
+			tmp = tmp->link;
+		}
+	}	
+	else {//식단을 저장하고자 하는 경우
+		meal_tmp = (struct meal *)data;
+		fwrite(meal_tmp, sizeof(struct meal), 365, fp);
+	}
+	fclose(fp);
+}
+```
+음식 카테고리, 또는 식단 데이터에 대해 링크드 리스트형태를 유지하면서 binary파일로 저장하는 함수입니다.
+음식 카테고리 저장인지 식단 저장인지에 대한 구분은 switch_num이라는 flag변수를 통해 한 함수에서 구조체 저장과 링크드 리스트 저장을 할 수 있게 하였습니다.
+
+음식 카테고리 링크드 리스트 형태로 저장될 경우, 읽어올때는 바로 공간만 할당하고 fread()함수를 호출하게 하였습니다.
+
+```c
+void readFrBinFile(char * filename, NODE **data, int switch_num) {
+.
+.
+read_tmp = (NODE *)malloc(sizeof(NODE));
+check = fread(read_tmp, sizeof(NODE), 1, fp);
+.
+.
+.
+}
+``` 
+
+
 ***
  
 ## 3. display.c
@@ -505,7 +753,7 @@ void drawData(struct meal *p, int *index_right, int *index_left) {
 
 먼저 switch-case문에서 윤년과 2월달의 일수를 고려하여 해당 month에 몇일을 표현해야 하는지에 대한 경계값 end를 얻고, 다음 반복문에 쓰이게 됩니다.
 
-다음으로, 본 과제에서 시간이 많이 소요된 부분으로 키보드 좌, 우 방향키를 누를 때 마다 다르게 캘린더를 그려주는 부분입니다.
+그 다음으로, 본 과제에서 구현과 디버깅 시간이 많이 소요된 부분으로 키보드 좌, 우 방향키를 누를 때 마다 다르게 캘린더를 그려주는 부분입니다.
 캘린더의 날짜들은 해당 프로그램을 실행한 컴퓨터의 현재 월, 일을 기준으로 합니다. 따라서 무작정 해당년도 1월 부터 12월 까지로 고정해서 표시할 수는 없었습니다.
 
 날짜가 고정되어 있지 않으므로, 이를 알아차릴 <strong>flag 변수인 index_left, index_right</strong> 를 통해 구분합니다.
