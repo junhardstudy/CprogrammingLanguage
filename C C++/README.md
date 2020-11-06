@@ -352,7 +352,7 @@ else {//여긴 메뉴 버튼
 아스키 코드값이 61인 F3키를 눌렀을 경우, 음식에 대한 검색/추가/삭제 삭제를 하는 분기문 입니다.
 좀 더 세분화된 제어를 위해 사용자로부터 한번더 입력을 받습니다.
 
-검색의 경우 find_food_propertise()함수를 호출하는데, 내부적으로는 strcmp()문자열 비교함수를 이용하면 찾습니다.
+검색의 경우 find_food_propertise()함수를 호출하는데, 내부적으로는 strcmp()문자열 비교함수를 이용하여 찾습니다.
 ```c
 if (strcmp(tmp->food_name, target) == 0)
 ```
@@ -443,12 +443,129 @@ command window에 보여주는 함수들이 정의되어 있습니다.
 사용자가 필요로 하는 기능들을 메인 메뉴형식으로 나타내고, 식단을 캘린더 형식으로 표현해주며, 사용자가 다음 또는 이전달의 식단을 보기 위해 키보드의 방향키를 누르면
 그에 맞게 식단을 다시 출력해줍니다.
 
+```c
+
+void drawData(struct meal *p, int *index_right, int *index_left) {
+	int i, j, k, tmp, end;
+	*index_left = *index_right;
+	
+	switch ((p + *index_right)->meal_calendary.month) {
+	case 2: {
+		if (((p->meal_calendary.year) % 4 == 0) && ((p->meal_calendary.year) % 100 == 0))
+			end = 29;
+		else if (((p->meal_calendary.year) % 400 == 0))
+			end = 29;
+		else
+			end = 28;
+	}
+			break;
+
+	case 1: case 3: case 5: case 7: case 8:case 10: case 12: end = 31;
+			break;
+
+	default: end = 30;
+	}
+	
+	
+	gotoxy(2, 1);
+	printf("%d년 식단표", (p + *index_right)->meal_calendary.year);
+	
+
+	for (i = (p + *index_right)->meal_calendary.day ; i <= end; i++) {
+		gotoxy((p + *index_right)->x, (p + *index_right)->y);
+		printf("%d월 %d일 ", (p + *index_right)->meal_calendary.month, (p + *index_right)->meal_calendary.day);
+		
+		for (j = 0; j < (p + *index_right)->meal_num; j++) {
+			gotoxy((p + *index_right)->x, (p + *index_right)->y + j + 2);
+			printf("%s", (p + *index_right)->meal_menu[j]);
+		}
+		if ((p + *index_right)->total_calories != 0) {
+			gotoxy((p + *index_right)->x, (p + *index_right)->y + j + 3);
+			printf("%d(kcal)", (p + *index_right)->total_calories);
+		}
+		
+		(*index_right)++; 
+		if (*index_right >= 365) {
+			*index_right = 0;
+			break;
+		}
+	}
+
+	gotoxy(1, 49);
+	printf("◀-----이전 식단 보기");
+
+	gotoxy(121, 49);
+	printf("다음 식단 보기-----▶");
+	
+}
+```
+캘린더 형 식단이므로, 키보드 좌, 우방향키를 누르면 이전 월, 다음 월로 각각 넘어갈 수 있어야 합니다.
+
+시스템의 오늘 날짜를 기준으로 달력을 그려야 한다는 요구 사항과 2월은 28일 밖에 없다는 점, 그리고 윤년 문제점때문에 end 기준점이 필요하였습니다.
+
+먼저 switch-case문에서 윤년과 2월달의 일수를 고려하여 해당 month에 몇일을 표현해야 하는지에 대한 경계값 end를 얻고, 다음 반복문에 쓰이게 됩니다.
+
+다음으로, 본 과제에서 시간이 많이 소요된 부분으로 키보드 좌, 우 방향키를 누를 때 마다 다르게 캘린더를 그려주는 부분입니다.
+캘린더의 날짜들은 해당 프로그램을 실행한 컴퓨터의 현재 월, 일을 기준으로 합니다. 따라서 무작정 해당년도 1월 부터 12월 까지로 고정해서 표시할 수는 없었습니다.
+
+날짜가 고정되어 있지 않으므로, 이를 알아차릴 <strong>flag 변수인 index_left, index_right</strong> 를 통해 구분합니다.
+
+
+
 ***
 
 ## 4. dataset.h
  
 정의된 함수에 대한 프로토타입 함수 선언부와 user type 구조체의 정의가 명시되어 있습니다.
 여기서 각 식단들이 어떤 형태의 구조체를 가지는지 확인할 수 있습니다.
+
+
+```c
+#include <conio.h>
+#include <time.h>
+#pragma warning(disable: 4996)
+
+void drawData(struct meal *, int *, int*);
+void drawData_left(struct meal *, int *, int*);
+void gotoxy(int, int);
+void drawMenu();
+void drawTable(int, int);
+void input_data(struct meal *, struct food_category *, struct food_category *, struct food_category *, struct food_category *, struct food_category *, struct food_category *);
+void storeData(struct food_category **, struct food_category **, struct food_category **, struct food_category **, struct food_category **, struct food_category **, struct food_category **);
+void drawSquare(int , int );
+```
+API 함수및 user define 데이터타입을 사용하기 위한 include 부분과 구현된 함수들에 대한 프로토타입 선언부 입니다.
+
+```c
+struct date {
+	int year, month, day, mday;
+};
+
+struct meal {
+	struct date meal_calendary;
+	int meal_num;//메뉴 개수
+	char meal_menu[4][16];
+	int total_calories;
+	int x, y;
+
+};
+
+struct food_category {
+	//int num;//해당 카테고리화 된 음식의 개수
+	char food_name[19];//음식이름은 최대 9자까지만...
+	int calorie;
+	int price;
+	struct food_category *link;//자기 참조 구조체
+};
+```
+식단을 구성하는데 필요한 데이터를 여러 구조체 파일로 선언한 부분입니다.
+
+
+food_category 구조체의 경우, 링크드 리스트의 노드에 대응되고 자주 쓰이므로 typedef로 선언되어 직관성과 효율성을 도모하였습니다.
+```c
+typedef struct food_category NODE;
+```
+본 프로그램에서는 다루는 여러 구조체 
 
 ***
 
