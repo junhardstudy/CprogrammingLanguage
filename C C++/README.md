@@ -28,13 +28,15 @@
 
 6. 구조체(struct)(이 프로젝트에서는 주로 구조체 포인터로 다룹니다.)
 
-7. 파일 쓰기, 읽기와 같은 파일 처리
+7. 동적할당
 
-8. advance 주제(Linked list, gotoxy(), 검색)
+8. 파일 쓰기, 읽기와 같은 파일 처리
+
+9. advance 주제(Linked list, gotoxy(), 검색)
 
 # 소스코드
 
-1. main_module.c
+## 1. main_module.c
 
 프로그램의 메인 로직을 중심으로 코딩을 하였습니다. 메인 로직은 사용자로부터 키보드 입력을 받고 대응하는 서브 루틴 함수들을 출력하는 형태입니다.
 
@@ -347,26 +349,108 @@ else {//여긴 메뉴 버튼
 					default:;
 					}
 ```
+아스키 코드값이 61인 F3키를 눌렀을 경우, 음식에 대한 검색/추가/삭제 삭제를 하는 분기문 입니다.
+좀 더 세분화된 제어를 위해 사용자로부터 한번더 입력을 받습니다.
 
+검색의 경우 find_food_propertise()함수를 호출하는데, 내부적으로는 strcmp()문자열 비교함수를 이용하면 찾습니다.
+```c
+if (strcmp(tmp->food_name, target) == 0)
+```
+<br>
+<br>
 
-2. data.c
+음식 데이터의 삭제는 remover_FoodName()을 호출합니다. remover_FoodName()함수에서 성공적으로 해당 데이터를 지웠으면, 링크드 리스트로
+구현된 음식 카테고리에서도 해당 음식 데이터를 지워야 합니다.
+
+음식 데이터가 지워지면, 링크드 리스트로 구현되어 있는 음식 카테고리에 대한 수정이 필요합니다.
+여기서 저는 링크드 리스트를 구성하는 모든 노드들을 free()를 통해 제거하고 distributeFood()함수를 다시 호출하여 새롭게 링크드 리스트를 구현하도록 해놨습니다.
+
+```c
+			case 62://저장하기/ 불러오기
+
+				system("cls");
+				system("mode con:cols=142 lines=15");
+				.
+				.
+				.
+					printf("저장하실 파일의 이름을 적어주세요\n");
+					gotoxy(1, 4);
+					scanf("%s", saved_file_name);
+					strcpy(saved_food_file_name, saved_file_name);
+					fflush(stdin);
+					strcat(saved_file_name, ".bin");
+					strcat(saved_food_file_name, "_food.bin");
+
+					writeAtFile(saved_file_name, cal_meal, 2);
+					writeAtFile(saved_food_file_name, food, 1);
+
+					gotoxy(1, 5);
+					printf("저장했습니다!");
+					gotoxy(1, 6);
+					printf("3초후 메인화면으로 돌아갑니다. \n");
+					Sleep(1000);
+					gotoxy(1, 6);
+					printf("2");
+					Sleep(1000);
+					gotoxy(1, 6);
+					printf("1");
+					Sleep(1000);
+
+					system("mode con:cols=143 lines=50");
+					drawTable(2, 2);
+					index_right = 0;
+					drawData(cal_meal, &index_right, &index_left);
+
+					break;
+
+				.
+				.
+				.
+				gotoxy(1, 1);
+				printf("프로그램을 종료합니다.");
+				Sleep(1500);
+				exit(0);
+				break;
+			default: continue;
+			}
+		}		
+	} 	
+}
+```
+다음으로 저장하기와 불러오기에 대한 제어입니다.
+이전에 음식 추가/검색/삭제에서의 제어 로직과 비슷해 주목할 부분만 가져왔습니다.
+
+식단을 저장하게 되면 binary파일로 저장하게 됩니다. binary 확장자 bin으로 지정해주기 위해 strcat()함수를 이용하였고 식단에 대한 데이터와
+음식에 대한 데이터들을 bin파일로 writeAtFile()함수를 통해 최종적으로 저장하게 됩니다.
+
+저장이 됬다는것을 시각적으로 알려주기 위해 Sleep()함수를 이용하여 시각적인 효과를 표시해주었습니다.
+
+***
+
+## 2. data.c
 
 메인 메뉴들이 적혀있는 음식 파일 menu.txt를 읽어들이고, 이를 구조체 형식으로 바꿉니다.
 구조체 데이터들을 이용하여 랜덤 식단과 건강 식단 생성, 새로운 식단 추가 또는 제거, text와 bin형태의 파일로 저장하는 함수들이 정의되어 있습니다.
 
 여기서 생성된 식단들은 링크드 리스트형식으로 관리됩니다.
 즉, 12월달에 생성된 각각의 일별 식단들이 링크드 리스트의 노드에 대응됩니다.
+
+***
  
-3. display.c
+## 3. display.c
 
 command window에 보여주는 함수들이 정의되어 있습니다.
 사용자가 필요로 하는 기능들을 메인 메뉴형식으로 나타내고, 식단을 캘린더 형식으로 표현해주며, 사용자가 다음 또는 이전달의 식단을 보기 위해 키보드의 방향키를 누르면
 그에 맞게 식단을 다시 출력해줍니다.
 
-4. dataset.h
+***
+
+## 4. dataset.h
  
 정의된 함수에 대한 프로토타입 함수 선언부와 user type 구조체의 정의가 명시되어 있습니다.
 여기서 각 식단들이 어떤 형태의 구조체를 가지는지 확인할 수 있습니다.
+
+***
 
 
 # C Programming Language
