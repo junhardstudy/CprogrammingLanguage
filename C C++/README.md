@@ -36,6 +36,14 @@
 
 9. advance 주제(Linked list, gotoxy(), 검색)
 
+***
+
+## 아이디어
+
+![idea](./image/idea.jpg)
+
+***
+
 # 소스코드
 
 ## 1. main_module.c
@@ -189,12 +197,11 @@ if (not_draw_condition == 1)continue;
 반대로 표시할 식단 데이터가 있다면 drawTable()함수를 호출하여 캘린더를 커맨드 윈도우에 표시하고, drawData()함수를 통해 식단 데이터들을 알맞게 표시해줍니다.
 1년 식단만 표시되야 하므로, 해당년도 1월에서 왼쪽키를 누르면 해당년도 12월로 돌아가야 하기 때문에 index_left와 index_right변수를 사용합니다.
 
-캘린더 라운딩 사진
+![lined diagram](./image/round.png)
 
 여기서 주의할 점이 getch()함수를 호출하게 되면 화살표의 경우 버퍼에는 224아스키코드값이 공통으로 저장됩니다. 따라서 getch() 리턴 값이 244라면 getch() 함수를 
 한번 더 호출하여 해당 화살표키가 오른쪽인지, 왼쪽인지 구분하게 됩니다.
 
-화살표 방향키 아스키 코드값 확인 사진
 
 ```c
 else {//여긴 메뉴 버튼
@@ -437,8 +444,6 @@ if (strcmp(tmp->food_name, target) == 0)
 여기서 생성된 식단들은 링크드 리스트형식으로 관리됩니다.
 즉, 12월달에 생성된 각각의 일별 식단들이 링크드 리스트의 노드에 대응됩니다.
 
-자료구조 사진
-
 ```c
 void storeData(struct food_category **food, struct food_category **bob, struct food_category **gook, struct food_category **jjige, struct food_category **banchan, struct food_category **bread_meal, struct food_category **noodle) {
 		NODE *tmp, *new_node, *new_node_sub;
@@ -495,8 +500,7 @@ void storeData(struct food_category **food, struct food_category **bob, struct f
 각각의 카테고리도 링크드 리스트이므로, 새로운 음식을 노드에 추가 하기위해서는 링크드리스트의 마지막 노드까지 검사를 하게 됩니다.
 해당 노드의 link멤버 변수가 null이라면, 마지막 노드이므로 새로운 음식데이터를 노드로 이어줍니다.
 
-카테고리 링크드 리스트 사진
-
+![lined diagram](./image/linkeddiagram.png)
 ```c
 void input_data(struct meal *cal_meal, struct food_category *bob, struct food_category *gook, struct food_category *jjige, struct food_category *banchan, struct food_category *bread_meal, struct food_category *noodle)
 {
