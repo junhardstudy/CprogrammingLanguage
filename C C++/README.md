@@ -26,7 +26,7 @@
 
 5. 함수, 함수인자
 
-6. 구조체(struct)(이 프로젝트에서는 주로 구조체 포인터로 다룹니다.)
+6. 구조체(이 프로젝트에서는 주로 구조체 포인터로 다룹니다.)
 
 7. 동적할당
 
@@ -813,9 +813,59 @@ food_category 구조체의 경우, 링크드 리스트의 노드에 대응되고
 ```c
 typedef struct food_category NODE;
 ```
-본 프로그램에서는 다루는 여러 구조체 
 
 ***
+
+## 실행 화면
+
+![이미지](./image/r1.JPG)
+메인화면
+<br>
+<br>
+
+![이미지](./image/r2.JPG)
+랜덤 식단
+<br>
+<br>
+
+![이미지](./image/r3.JPG)
+건강 식단 체중 입력
+<br>
+<br>
+
+![이미지](./image/r4.JPG)
+건강 식단 활동량 입력
+<br>
+<br>
+
+![이미지](./image/r5.JPG)
+건강 식단
+<br>
+<br>
+
+![이미지](./image/r6.JPG)
+음식 추가/검색/삭제
+<br>
+<br>
+
+![이미지](./image/r7.JPG)
+음식 검색
+<br>
+<br>
+
+![이미지](./image/r8.JPG)
+음식 검색 결과
+<br>
+<br>
+
+![이미지](./image/r9.JPG)
+저장/불러오기
+<br>
+<br>
+
+![이미지](./image/r10.JPG)
+
+![이미지](./image/r11.JPG)
 
 
 # C Programming Language
