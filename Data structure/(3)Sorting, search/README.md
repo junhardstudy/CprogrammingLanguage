@@ -162,14 +162,98 @@ void check_insertion(Node* input, head* list_head) {
 
 }
 ```
-이번에는 링크드 리스트로 구현된 linear list함수에 대한 insertion연산 입니다.
+이번에는 링크드 리스트로 구현된 linear list에 대한 insertion연산 입니다.
 
-배열에서와 마찬가지로, 링크드 리스트에서 insertion을 수행할 때 적절한 노드의 위치를 찾기 위해 check_insertion()함수를 호출합니다.
+배열에서와 마찬가지로, 링크드 리스트에서 insertion을 수행할 때 적절한 노드의 위치를 찾고 수정하기 위해 check_insertion()함수를 호출합니다.
 
-check_insertion()함수의 경우, Node의 link를 따라가면서 적절한 위치를 찾게 됩니다. 링크드 리스트의 경우, 전체 데이터의 순서를 수정할 때 이전 노드의 주소를 알아야 할 필요가 있습니다.
+check_insertion()함수의 경우, Node의 link를 따라가면서 적절한 위치를 찾게 됩니다. 링크드 리스트이므로 전체 데이터의 순서를 수정할 때 이전 노드의 주소를 알아야 할 필요가 있습니다.
 더블 링크드 리스트로 구현이 되면 하나의 노드위치만 알아도 인접한 앞, 뒤 노드의 위치를 알수 있지만 싱글 링크드 리스트 이기때문에 따로 처리가 필요합니다. 
 
 이런 처리는 preNode라는 임시 Node구조체 변수에 다음 Node를 찾기 전에 현재 Node의 주소를 저장하게 됩니다.그리고 적절한 위치를 찾으면 preNode의 Next는 새로 들어오는 데이터 input을
 가리키게 되고, 새로 들어온 input의 next는 아까 찾은 적절한 위치에 존재하는 노드를 참조합니다.
 
-그림 필요
+![](그림필요)
+
+```c
+Node* search(head* list_head, int target_num, int mode) {//when mode is zero, only perform search,
+													   // otherwise perform search and deletion(out)
+	Node* access;
+	Node* preNode;
+	Node* tmp;
+	access = list_head->link_head;
+	preNode = access;
+	while (access != NULL) {
+		if (access->num == target_num) {
+			if (mode != 0) {//when deletion perform at head
+				if (access == list_head->link_head) {
+					tmp = list_head->link_head->next;
+					free(access);
+					list_head->link_head = tmp;
+					return tmp;
+				}//when deletion perform all exclude head position.
+				else {
+					preNode->next = access->next;
+					free(access);
+					return list_head->link_head;
+				}
+			}
+			else
+				return access;//if found the data, it'll be return address of where is data stored.
+		}
+		else {
+			preNode = access;
+			access = access->next;
+		}
+	}
+	return NULL;//it can't be found.
+}
+```
+링크드 리스트로 구현된 linear list에 대한 search와 deletion연산을 같이 구현해 놓은 함수입니다.
+
+mode라는 flag 매개변수값을 받아서 하나의 함수가 두 기능을 모두 수행할 수 있게 하였습니다.
+
+search와 deletion모두 특정 노드를 찾아야 하므로, 링크에 연결된 모든 노드들을 검사하게 됩니다.
+특히 deletion에서는 check_insertion()와 마찬가지로 링크드 리스트의 Header가 아닌 Node를 제거할 때는, 이전 Node의 주소를 기억할 필요가 있습니다.
+만약 이전 Node의 위치를 기억하지 못한다면 이전 Node의 next가 지워지는 노드의 Next가 가리키는 노드를 참조할 수 없습니다.
+
+![](그림필요)
+
+```c
+void list_array_show(Node* a[]) {
+	int i = 0;
+	printf("The current status of List : ");
+	while (a[i] != NULL) {
+		printf("%d", *a[i++]);
+		if (a[i] != NULL)printf(", ");
+
+	}
+	printf("\n\n");
+}
+void list_show(head* list_head) {
+	Node* access;
+	int i;
+	access = list_head->link_head;
+	printf("The current status of List : ");
+	for (i = 0; access != NULL; i++) {
+		printf("%d", access->num);
+		if (access->next != NULL)printf(", ");
+		access = access->next;
+
+	}
+	printf("\n\n");
+}
+```
+나머지 두 함수는 각각 배열과 링크드 리스트로 구현된 linear list내에 있는 모든 data들을 표시하는 traversal 기능을 담당하는 함수입닌다.
+
+***
+
+
+## 결과
+
+![result](./image/array_result.JPG)
+배열로 구현한 linear list
+<br>
+<br>
+
+![result](./image/linked_result.JPG)
+링크드 리스트로 구현한 linear list
