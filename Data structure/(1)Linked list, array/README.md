@@ -369,7 +369,7 @@ while (array_digit[i] != NULL) {
 	array_digit[++i] = strtok(NULL, " *+-/%()");
 }
 ```
-방정식 equation 문자열에서 숫자만(only digit)만 추출해서 array_digit배열 변수에 저장하는 부분입니다.
+수식 문자열에서 숫자만(only digit)만 추출해서 array_digit배열 변수에 저장하는 부분입니다.
 <br>
 <br>
 
