@@ -305,7 +305,278 @@ void convert_to_binary(int decimal) {
 }
 ```
 
+10진수를 2진수를 바꾸는 경우는 아래와 같이 나머지를 역으로 구하면, 표현할 수 있습니다.
 
+나머지를 역으로 구하는 것을, 스택의 First In, Last Out구조를 이용하여 표현할 수 있습니다.
+
+![equ](./image/transformation.png)
+
+```c
+while (equation[i] != NULL) {
+		switch (equation[i++]) {
+		case '(':
+			array_operator[j] = '(';
+			tmp_op[k++] = array_operator[j++];
+			tmp_op[k++] = ' ';
+
+			break;
+		case ')':
+			array_operator[j] = ')';
+			tmp_op[k++] = array_operator[j++];
+			tmp_op[k++] = ' ';
+			break;
+		case '+':
+			array_operator[j] = '+';
+			tmp_op[k++] = array_operator[j++];
+			tmp_op[k++] = ' ';
+			break;
+		case '-':
+			array_operator[j] = '-';
+			tmp_op[k++] = array_operator[j++];
+			tmp_op[k++] = ' ';
+			break;
+		case '*':
+			array_operator[j] = '*';
+			tmp_op[k++] = array_operator[j++];
+			tmp_op[k++] = ' ';
+			break;
+		case '/':
+			array_operator[j] = '/';
+			tmp_op[k++] = array_operator[j++];
+			tmp_op[k++] = ' ';
+			break;
+		case '%':
+			array_operator[j] = '%';
+			tmp_op[k++] = array_operator[j++];
+			tmp_op[k++] = ' ';
+			break;
+
+		}
+	}
+	tmp_op[k] = NULL;
+```
+
+postfix로 바꾸기전에, 괄호와 연산자(+, -, *, /, %)만 tmp_op배열에 담아두는 부분입니다.
+
+tmp_op의 경우, 아래와 같이 token으로 분리해야 하는데 token구분을 위해서 연산자, 띄어쓰기 형태로 저장됩니다.
+<br>
+<br>
+
+```c
+array_digit[0] = strtok(equation, " *+-/%()");
+i = 0;
+while (array_digit[i] != NULL) {
+	array_digit[++i] = strtok(NULL, " *+-/%()");
+}
+```
+방정식 equation 문자열에서 숫자만(only digit)만 추출해서 array_digit배열 변수에 저장하는 부분입니다.
+<br>
+<br>
+
+```c
+ptr_array_op[0] = strtok(tmp_op, " ");
+i = 0;
+while (array_operator[i] != NULL) {
+	ptr_array_op[++i] = strtok(NULL, " ");
+}
+```
+연산자 - 띄어스기 형태로 저장되어 있는 tmp_op배열에 대해 연산자만 strtok함수를 통해 추출하는 부분입니다.
+ 
+이러한 오직 연산자만을 들고 있는 ptr_array_op배열과 오직 숫자만을 들고 있는 array_digit배열을 가지고
+아래에서 띄어쓰기가 없는 infix notation 수식으로 먼저 만드는데 사용됩니다.
+<br>
+<br>
+<br>
+
+```c
+i = 0;
+j = 0;
+k = 0;
+
+while (ptr_array_op[i] != NULL) {
+	if (!strcmp("(", ptr_array_op[i])) {
+		infix[k++] = ptr_array_op[i++];
+
+	}
+	else if (!strcmp("+", ptr_array_op[i]) && j != 0) {
+
+		infix[k++] = ptr_array_op[i++];
+	}
+	else if (!strcmp("-", ptr_array_op[i]) && j != 0) {
+		infix[k++] = ptr_array_op[i++];
+	}
+	else if (!strcmp("/", ptr_array_op[i]) && j != 0) {
+		infix[k++] = ptr_array_op[i++];
+	}
+	else if (!strcmp("%", ptr_array_op[i]) && j != 0) {
+		infix[k++] = ptr_array_op[i++];
+	}
+	else if (!strcmp("*", ptr_array_op[i]) && j != 0) {
+		infix[k++] = ptr_array_op[i++];
+	}
+	else {//닫힌 괄호 나왔을때
+		if (j != 0) {
+			infix[k++] = ptr_array_op[i++];
+			continue;
+		}
+	}
+
+	infix[k++] = array_digit[j++];
+}
+infix[k] = ptr_array_op[i];
+```
+<br>
+<br>
+<br>
+
+```c
+i = 0;
+	j = 0;
+	while (infix[i] != NULL) {
+		if (!strcmp(infix[i], "(")) {
+			push_string_linked(stack_operatror, infix[i]);
+			i++;
+		}
+		else if (!strcmp(infix[i], "+") || !strcmp(infix[i], "-")) {
+			access_stack_data = Top(stack_operatror);
+
+			while (1) {
+				access_stack_data = Top(stack_operatror);
+				if (access_stack_data == NULL || !strcmp(access_stack_data->string_op, "(")) {
+					break;
+				}
+				if (!strcmp(access_stack_data->string_op, "*") || !strcmp(access_stack_data->string_op, "/") || !strcmp(access_stack_data->string_op, "+") || !strcmp(access_stack_data->string_op, "-")) {
+					real_data = pop_linked(stack_operatror);
+
+					postfix[j++] = real_data.string_op;
+				}
+			}
+			push_string_linked(stack_operatror, infix[i++]);
+			postfix[j++] = infix[i++];
+		}
+		else if (!strcmp(infix[i], "*") || !strcmp(infix[i], "/")) {
+			access_stack_data = Top(stack_operatror);
+			if (access_stack_data == NULL) {
+				push_string_linked(stack_operatror, infix[i++]);
+				continue;
+			}
+			if (!strcmp(access_stack_data->string_op, "*") || !strcmp(access_stack_data->string_op, "/")) {
+				real_data = pop_linked(stack_operatror);
+				push_string_linked(stack_operatror, infix[i]);
+				i++;
+				postfix[j++] = real_data.string_op;
+				postfix[j++] = infix[i];//operator 다음에는 무조건 operand가 옴
+				i++;
+			}
+			else {
+				push_string_linked(stack_operatror, infix[i]);
+				i++;
+			}
+		}
+		else  if (!strcmp(")", infix[i])) {//닫힌 괄호가 오는 경우
+			i++;
+			while (1) {
+
+				real_data = pop_linked(stack_operatror);
+				printf("%s \n", real_data.string_op);
+				if (!strcmp(real_data.string_op, "(")) {
+					printf("op = %s\n", real_data.string_op);
+					break;
+				}
+				postfix[j++] = real_data.string_op;
+			}
+		}
+		else {//숫자일 경우	
+			postfix[j++] = infix[i];
+			i++;
+		}
+	}
+```
+이제 띄어쓰기가 없는 형태의 infix notation 수식에서 postfix notation 수식으로 바꾸게 됩니다.
+
+전체적인 알고리즘은 다음과 같습니다.
+
+1. 입력은 infix notation
+
+2. 입력을 한글자씩 읽어들일 때, 숫자이면 피연산자 이므로 postfix notation에 바로 대입합니다.
+
+3. 연산자(+, -, *, /, %)의 경우 현재 스택의 top의 data보다 우선순위가 높을때까지 pop하여 스택에 저장되어 있던 데이터를 읽어들입니다. 그리고 우선순위가 높아졌다면 top에 해당 연산자를 데이터로 넣습니다.
+
+4. 왼쪽 괄호인 경우, 오른쪽 괄호가 등장하기 전까지 등장하는 연산자들을 연산자 스택(stack_operatror)에 넣습니다.
+
+5. 오른쪽 괄호인 경우, 연산자 스택(stack_operatror)에 저장된 왼쪽 괄호가 등장하기 전까지 모든 연산자들을 pop합니다.
+
+이러한 알고리즘을 (23+56)/2+21*2+16-13 수식을 이용해서 예를 들겠습니다.
+
+먼저 왼쪽 괄호 '('를 스택에 넣습니다. 이는 우선순위가 높은 괄호가 등장하기 때문입니다. 
+
+stack_operatror : (
+
+postfix : 
+<br>
+<br>
+다음으로 23 숫자가 등장하므로, postfix notation에 바로 적습니다.
+
+stack_operatror : (
+
+postfix : 23
+<br>
+<br>
+다음은 +연산자가 등장하므로, 연산자 스택을 조사합니다. 현재 ( 괄호만 저장되어 있으므로 따로 pop할 필요가 없습니다.
+
+따라서 +연산자를 연산자 스택에 push 해놓습니다.
+
+stack_operatror : ( +
+
+postfix : 23
+<br>
+<br>
+다음은 56 숫자가 등장하므로, postfix notation에 바로 적습니다.
+
+stack_operatror : (
+
+postfix: 23 56
+<br>
+<br>
+다음으로 닫힌 괄호가 등장합니다. 이는 왼쪽 괄호가 등장하기 전까지 연산자 스택을 pop하면서 postfix에 바로 적습니다.
+
+stack_operatror : empty
+
+postfix : 23 56 +
+<br>
+<br>
+다음으로 / 연산자입니다. 피연산자(숫자)가 등장하기 전이므로, 스택이 비어있으므로 스택 연산자에 넣게 됩니다.
+
+stack_operatror : /
+
+postfix : 23 56 + 
+<br>
+<br>
+다음은 숫자 2입니다. 마찬가지로 숫자는 바로 적습니다.
+
+stack_operatror : /
+
+postfix : 23 56 + 2
+<br>
+<br>
+다음은 +연산자 입니다.스택을 검사하면 현재 스택 연산자에는 현재 / 연산자가 있습니다. 따라서 +보다 우선순위가 높은 연산자가 나올때까지
+스택연산자를 pop하게 됩니다. 현재 스택 연산자에는 / 연산자만 있고, /연산자가 우선순위가 보다 더 높으므로 아래와 같습니다. /연산자를
+만나면 +연산자를 연산자 스택에 넣습니다.
+
+stack_operatror : +
+
+postfix : 23 56 + 2 /
+<br>
+<br>
+이와 같은 과정을 반복하면 아래와 같은 postfix notation이 완성됩니다.
+
+postfix : 23 56 + 2 / 21 2 * + 16 + 13 -
+
+***
+
+## 결과
+
+![result](./image/result.JPG)
 
 
 
