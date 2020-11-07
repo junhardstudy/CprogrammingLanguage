@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#pragma warning (disable:4996)
+
 
 typedef struct {
 	char char_data[1];
@@ -36,7 +38,7 @@ void push(stack_array* t1, char sel, int input_data);
 void clear_stack(stack_array* t1);
 linked_data* Top(stack_linked* t1);
 linked_data pop_linked(stack_linked* t1);
-void push_linked(stack_linked* t1, int );
+void push_linked(stack_linked* t1, int);
 void print_all_data(stack_linked* t1);
 void convert_to_binary(int decimal);
 void push_string_linked(stack_linked* t1, char* input_data);
@@ -45,7 +47,7 @@ void push_string_linked(stack_linked* t1, char* input_data);
 
 int main()
 {
-	char test_Data[2]={'+','\0'};
+	char test_Data[2] = { '+','\0' };
 	char equation[500];
 	char for_operator[500];
 	char tmp_op[500];
@@ -65,8 +67,8 @@ int main()
 	linked_data tmp_linked;
 	data* tmp;
 	data* test1;
-	stack_array *t1;
-	
+	stack_array* t1;
+
 	stack_linked* postfix_stack = (stack_linked*)malloc(sizeof(stack_linked));
 	stack_linked* stack_operatror = (stack_linked*)malloc(sizeof(stack_linked));
 	stack_linked* stack_calcul = (stack_linked*)malloc(sizeof(stack_linked));
@@ -79,7 +81,7 @@ int main()
 	마지막에 free, 메모리 정리 필요
 
 	*********************/
-	
+
 
 	printf("바꿀 10진수? : ");
 	scanf("%d", &input_tmp);
@@ -134,29 +136,29 @@ int main()
 			tmp_op[k++] = ' ';
 			break;
 
-		}		
+		}
 	}
 	tmp_op[k] = NULL;
-	
+
 	array_digit[0] = strtok(equation, " *+-/%()");
 	i = 0;
 	while (array_digit[i] != NULL) {
 		array_digit[++i] = strtok(NULL, " *+-/%()");
 	}
-	
-	
+
+
 	ptr_array_op[0] = strtok(tmp_op, " ");
 	i = 0;
 	while (array_operator[i] != NULL) {
 		ptr_array_op[++i] = strtok(NULL, " ");
 	}
-	
+
 	printf("\n\n");
 	i = 0;
 	while (array_operator[i] != NULL) {
 		printf("%c ", array_operator[i++]);
 	}
-	
+
 	printf("\n");
 	i = 0;
 	while (array_digit[i] != NULL) {
@@ -169,20 +171,20 @@ int main()
 		printf("%s ", ptr_array_op[i++]);
 	}
 	i = 0;
-	
+
 	//(23+ 56)/2 + 21 *2 +16 -13
 	//infix로 만들기
 	i = 0;
 	j = 0;
 	k = 0;
-	
+
 	while (ptr_array_op[i] != NULL) {
 		if (!strcmp("(", ptr_array_op[i])) {
 			infix[k++] = ptr_array_op[i++];
-			
+
 		}
 		else if (!strcmp("+", ptr_array_op[i]) && j != 0) {
-			
+
 			infix[k++] = ptr_array_op[i++];
 		}
 		else if (!strcmp("-", ptr_array_op[i]) && j != 0) {
@@ -203,7 +205,7 @@ int main()
 				continue;
 			}
 		}
-		
+
 		infix[k++] = array_digit[j++];
 	}
 	infix[k] = ptr_array_op[i];
@@ -217,37 +219,39 @@ int main()
 	i = 0;
 	j = 0;
 	while (infix[i] != NULL) {
-		
+
 		if (!strcmp(infix[i], "(")) {
 			push_string_linked(stack_operatror, infix[i]);
 			i++;
 
 
-		}else if (!strcmp(infix[i], "+") || !strcmp(infix[i], "-")) {
+		}
+		else if (!strcmp(infix[i], "+") || !strcmp(infix[i], "-")) {
 			access_stack_data = Top(stack_operatror);
 
-		
+
 			while (1) {
 				access_stack_data = Top(stack_operatror);
 				if (access_stack_data == NULL || !strcmp(access_stack_data->string_op, "(")) {
 					break;
 				}
-				
+
 				if (!strcmp(access_stack_data->string_op, "*") || !strcmp(access_stack_data->string_op, "/") || !strcmp(access_stack_data->string_op, "+") || !strcmp(access_stack_data->string_op, "-")) {
 					real_data = pop_linked(stack_operatror);
-			
+
 					postfix[j++] = real_data.string_op;
-					
+
 				}
-				
+
 			}
-			
 
-				push_string_linked(stack_operatror, infix[i++]);
-				postfix[j++] = infix[i++];
-			
 
-		}else if (!strcmp(infix[i], "*") || !strcmp(infix[i], "/")) {
+			push_string_linked(stack_operatror, infix[i++]);
+			postfix[j++] = infix[i++];
+
+
+		}
+		else if (!strcmp(infix[i], "*") || !strcmp(infix[i], "/")) {
 			access_stack_data = Top(stack_operatror);
 			if (access_stack_data == NULL) {
 				push_string_linked(stack_operatror, infix[i++]);
@@ -265,12 +269,13 @@ int main()
 				push_string_linked(stack_operatror, infix[i]);
 				i++;
 			}
-			
 
-		}else  if(!strcmp(")", infix[i])){//닫힌 괄호가 오는 경우
+
+		}
+		else  if (!strcmp(")", infix[i])) {//닫힌 괄호가 오는 경우
 			i++;
 			while (1) {
-				
+
 				real_data = pop_linked(stack_operatror);
 				printf("%s \n", real_data.string_op);
 				if (!strcmp(real_data.string_op, "(")) {
@@ -278,17 +283,17 @@ int main()
 					break;
 				}
 				postfix[j++] = real_data.string_op;
-				
+
 			}
-			
+
 
 		}
 		else {//숫자일 경우	
 			postfix[j++] = infix[i];
 			i++;
-			
+
 		}
-		
+
 	}
 	access_stack_data = Top(stack_operatror);
 	while (access_stack_data != NULL) {
@@ -300,48 +305,11 @@ int main()
 	printf("success?\n");
 	i = 0;
 	printf("postfix notation = ");
-	while (postfix[i] !=NULL)printf("%s ", postfix[i++]);
+	while (postfix[i] != NULL)printf("%s ", postfix[i++]);
 	printf("\n\n");
 
-	i = 0;
-	while (1) {
-		if (postfix[i] == NULL) break;
 
-		if (!strcmp(postfix[i], "+") || !strcmp(postfix[i], "-") || !strcmp(postfix[i], "/") || !strcmp(postfix[i], "*") || !strcmp(postfix[i], "%")) {
-			real_data = pop_linked(stack_calcul);
-			op2 = atoi(real_data.string_op);
-			real_data = pop_linked(stack_calcul);
-			op1 = atoi(real_data.string_op);
-
-			if (!strcmp(postfix[i], "+"))op1 = op1 + op2;
-			if (!strcmp(postfix[i], "-"))op1 = op1 - op2;
-			if (!strcmp(postfix[i], "/")) op1 = op1 / op2;
-			if (!strcmp(postfix[i], "*")) op1 = op1 * op2;
-			i++;
-
-			push_linked(stack_calcul, op1);
-			continue;
-		}
-		else {
-			op1 = atoi(postfix[i++]);
-			push_linked(stack_calcul, op1);
-		}
-	}
-	printf("계산 결과 = %d\n", op1);
-	
-		
-		
-		
-	}
-
-
-
-
-
-
-
-
-
+}
 
 /**************************************
 	operation for array
@@ -357,7 +325,7 @@ data* retrieve(stack_array* t1) {
 	}
 }
 
-data* pop(stack_array *t1) {
+data* pop(stack_array* t1) {
 	int check;
 
 	check = check_empty(t1);
@@ -413,7 +381,7 @@ void clear_stack(stack_array* t1) {
 	operation for linked list
 **************************************/
 
-linked_data pop_linked(stack_linked *t1) {
+linked_data pop_linked(stack_linked* t1) {
 	linked_data tmp;
 	linked_data* prev_node;
 	if (t1->top != NULL) {//exist data for retrieve at linked list
@@ -440,40 +408,40 @@ linked_data* Top(stack_linked* t1) {
 	}
 }
 void print_all_data(stack_linked* t1) {
-	linked_data *tmp;
+	linked_data* tmp;
 	tmp = t1->top;
 
-	while(tmp != NULL){
-		
-		
+	while (tmp != NULL) {
+
+
 		printf("%d", tmp->int_data);
 		tmp = tmp->next;
-	
+
 	}
 }
 
 void push_linked(stack_linked* t1, int input_data) {
 	linked_data* input;
 	input = (linked_data*)malloc(sizeof(linked_data));
-	
+
 	input->int_data = input_data;
-	
-	if (t1->cur_size_of_stack == 0){
-		
+
+	if (t1->cur_size_of_stack == 0) {
+
 		input->next = NULL;
-		
+
 		t1->top = input;
-		
+
 
 
 	}
 	else {
-		
+
 		input->next = t1->top;
 		t1->top = input;
 	}
 	++(t1->cur_size_of_stack);
-	
+
 }
 
 void push_string_linked(stack_linked* t1, char* input_data) {
@@ -503,19 +471,19 @@ void push_string_linked(stack_linked* t1, char* input_data) {
 
 void convert_to_binary(int decimal) {
 	int tmp = decimal;
-	stack_linked *t1;
+	stack_linked* t1;
 	t1 = (stack_linked*)malloc(sizeof(stack_linked));
 	t1->cur_size_of_stack = 0;
 	t1->top = NULL;
 	//char bin[30];//2E30 까지만 표현
 	push_linked(t1, decimal % 2);
 	decimal /= 2;
-	while(decimal / 2 != 0)
+	while (decimal / 2 != 0)
 	{
 
-		push_linked(t1,	decimal % 2);
+		push_linked(t1, decimal % 2);
 		decimal /= 2;
-		
+
 	}
 	push_linked(t1, decimal % 2);
 	printf("\n*******************************\n");
