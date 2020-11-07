@@ -12,7 +12,7 @@
 4. Stack구조를 이용하여, 10진수를 2진수로 변환합니다.
 
 
-5. 수식을 하나의 문자열로 받은 다음, token을 분석하여 계산을 수행하는 계산기를 만듭니다.
+5. 수식을 하나의 문자열로 받은 다음, token을 분석하여 infix notation인 수식을 postfix notation으로 바꿉니다.
 
 ***
 
@@ -91,15 +91,221 @@ typedef struct {
 
 먼저, 링크드 리스트의 경우 링크드 리스트 노드, 해당 노드에 들어갈 데이터, 마지막으로 스택에 대한 정의가 필요합니다.
 
+
 링크드 리스트의 각 노드들은 다음 노드에 대한 주소를 알아야 합니다. 따라서 멤버에 자기 참조 구조체 포인터를 둡니다.
 ```c
 struct linked_data_inner* next;
 ```
 
 링크드 리스트 대입 사진
-
+<br>
+<br>
+<br>
 
 ```c
-
+void push_linked(stack_linked* t1, int input_data) {
+	linked_data* input;
+	input = (linked_data*)malloc(sizeof(linked_data));
+	
+	input->int_data = input_data;
+	
+	if (t1->cur_size_of_stack == 0){
+		
+		input->next = NULL;
+		
+		t1->top = input;
+	}
+	else {		
+		input->next = t1->top;
+		t1->top = input;
+	}
+	++(t1->cur_size_of_stack);	
+}
 ```
+링크드 리스트로 구현된 스택 구조에서, stack push를 수행하는 함수입니다.
+
+
+먼저 링크드 리스트로 구현되기 때문에, 스택에 들어갈 데이터에 대한 동적할당을 합니다.
+동적할당된 구조체 데이터의 멤버에 실제 들어갈 데이터를 입력해주고, 스택의 사이즈를 조사하게 됩니다.
+
+
+스택의 사이즈가 0이라면, 현재 스택은 비어있는 스택이므로 스택의 top이 새로 들어온 데이터(input 구조체 변수)를 가리키도록 합니다. 
+그리고 스택의 바닥을 가리키도록 새로 들어온 데이터의 다음 link를 NULL로 초기화 합니다.
+
+
+스택의 사이즈가 0이 아니라면, 새로 들어올 데이터의 link를 스택의 top이 가리키는 데이터를 지칭하도록 한다음에 스택의 top을 다시 새로 들어올
+데이터에 가리키도록 바꿉니다.
+<br>
+<br>
+<br>
+
+```c
+linked_data pop_linked(stack_linked *t1) {
+	linked_data tmp;
+	linked_data* prev_node;
+	if (t1->top != NULL) {//exist data for retrieve at linked list
+		tmp = *(t1->top);
+		prev_node = t1->top;
+		(t1->top) = t1->top->next;
+		free(prev_node);//delete node when data was pop from stack
+		t1->cur_size_of_stack--;
+		return tmp;
+	}
+	else {
+		printf("there is no data from stack!\n");
+		printf("program will be terminated!\n");
+		exit(-1);
+	}
+}
+```
+링크드 리스트로 구현된 스택 구조에서, pop을 수행하는 함수입니다.
+
+
+먼저 스택의 top이 NULL을 가리키는지 검사하여 스택이 비어있는지 검사하게 됩니다.비어있다면, 메시지를 에러메시지를 출력하고 종료합니다.
+
+
+비어있지 않다면, 임시 구조체 포인터 변수 tmp에 top이 가리키는 data 주소를 저장하게 됩니다. 이는 pop하고 난뒤에 자원반납(free)때 pop된
+stack 원소에 대한 주소가 필요하기 때문입니다. 
+
+
+스택의 top이 가리키던 구조체 멤버인 next를 통해 top 아래에 있는 구조체의 주소를 알 수 있으며, top이 이 주소를 지칭함으로써 스택 구조를 쉽게
+변경할 수 있습니다.
+
+
+변경후에는, 아까 저장한 tmp를 통해 pop된 동적할당 구조체에 대해 자원을 반납하게 됩니다.
+<br>
+<br>
+<br>
+
+```c
+linked_data* Top(stack_linked* t1) {
+	if (t1->top != NULL) {//exist data for retrieve at linked list
+		return t1->top;
+	}
+	else {
+		return NULL;
+	}
+}
+```
+Top연산의 경우, 단순히 스택의 Top이 가리키던 데이터만 읽으면(only retrieve) 됩니다. 
+따라서 top이 가리키는 구조체에 대한 주소만 return해주면 됩니다. 
+<br>
+<br>
+<br>
+
+```c
+void push(stack_array* t1, char sel, int input_data) {
+	int check;
+	check = full_check(t1);
+	if (check == 0) {
+		if (sel == 'c') {//character
+			++(t1->top);
+			(t1->element_data + t1->top)->char_data[0] = (char)input_data;
+		}
+		else if (sel == 'd') {//digit
+			++(t1->top);
+			(t1->element_data + t1->top)->int_data = (int)input_data;
+		}
+		else {
+			printf("wrong selection!\n");
+			exit(-1);
+		}
+	}
+	else {
+		printf("there is no space for pushing data into stack!\n");
+		exit(-1);
+	}
+
+}
+```
+배열로 구현된 스택 구조에서, push 연산을 담당하는 함수입니다.
+
+
+char sel이라는 flag변수를 통해, 스택에 넣는 데이터가 문자인지, 숫자(int)인지 구분합니다.
+
+배열로 구현되어 있기 때문에 동적 할당을 이용하는 링크드 리스트와 달리 고정된 크기의 스택이 생성됩니다.
+따라서 push를 하기전에 먼저 스택에 넣을 공간이 있는지 확인할 필요가 있습니다. 이를 full_check()라는 함수를 통해
+스택이 가득 찼는지 확인합니다.
+
+스택에 공간이 남아 있다면, 스택의 인덱스값을 저장하고 있는 멤버 top을 증가하게 되고, <strong>스택 배열 시작점 + 인덱스 값</strong>
+을 하여 해당 위치에 데이터를 넣게 됩니다. 
+<br>
+<br>
+<br>
+
+```c
+data* pop(stack_array *t1) {
+	int check;
+
+	check = check_empty(t1);
+	if (check == 1)
+		return (t1->element_data) + t1->top--;
+	else {
+		printf("there is no data for pop at stack!\n");
+		exit(-1);
+	}
+}
+```
+
+배열로 구현된 스택에서 pop 연산을 수행하는 함수입니다.
+
+배열형태의 스택은 링크드 리스트와 달리 값을 지운다거나 할 필요없이 논리적으로 index를 하나 감소시키는 방향으로 생각하였습니다.
+즉, top을 단순히 하나 감소시키면 이전에 가리키던 top은 pop된 다음에 stack에서 지워졌다고 생각할 수 있습니다.
+
+배열 형태이기 때문에, 인덱스 범위가 중요합니다. 따라서 먼저 해당 스택이 비어있는지 확인하는 check_empty()함수를 먼저 호출합니다.
+이를 이용해, index가 0미만을 가리키도록 하는것을 방지할 수 있습니다.
+<br>
+<br>
+<br>
+
+```c
+data* retrieve(stack_array* t1) {
+	int check;
+	check = check_empty(t1);
+	if (check == 1)
+		return (t1->element_data) + t1->top;
+	else {
+		printf("there is no data for retireve at stack!\n");
+		exit(-1);
+	}
+}
+```
+배열로 구현된 스택에서 top연산을 수행하는 retrieve()함수 입니다.
+
+여기서도 링크드 리스트와 마찬가지로, 단순히 값만 return 해주면 됩니다. 단, 배열이기 때문에 index가 0미만을 가리키지 않도록 하기 위해
+check_empty()함수가 먼저 선행됩니다.
+<br>
+<br>
+<br>
+
+```c
+void convert_to_binary(int decimal) {
+	int tmp = decimal;
+	stack_linked *t1;
+	t1 = (stack_linked*)malloc(sizeof(stack_linked));
+	t1->cur_size_of_stack = 0;
+	t1->top = NULL;
+	//char bin[30];//2E30 까지만 표현
+	push_linked(t1, decimal % 2);
+	decimal /= 2;
+	while(decimal / 2 != 0)
+	{
+
+		push_linked(t1,	decimal % 2);
+		decimal /= 2;
+		
+	}
+	push_linked(t1, decimal % 2);
+	printf("\n*******************************\n");
+	printf("%d(base 10) -> ", tmp);
+	print_all_data(t1);
+	printf("(base 2)\n");
+	printf("*******************************\n");
+
+}
+```
+
+
+
+
 
