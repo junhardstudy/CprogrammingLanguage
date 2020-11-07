@@ -106,5 +106,150 @@ typedef struct {
 <br>
 <br>
 
+```c
+queue_array* make_queue_array() {
+	queue_array* bank;
+	int i;
+	bank = (queue_array*)malloc(sizeof(queue_array));
+
+	bank->front = 0;
+	bank->rear = 0;
+	bank->size = 6;
+
+	for (i = 0; i < 6; i++) {
+		bank->customer[i] = NULL;
+	}
+	return bank;
+}
+```
+배열 형태의 큐 자체를 생성하는 함수입니다. 따라서 큐 자체에는 동적할당을 하였고, 내부에 큐의 사이즈는 멤버의 배열크기인 6으로 고정되어 있습니다.
+<br>
+<br>
+<br>
+
+```c
+int enqueue_array(queue_array* bank) {
+	customer_info* gogek;
+	char customer_name[20];
+
+	if (check_queue_array_full(bank)) {
+		gogek = (customer_info*)malloc(sizeof(customer_info));
+		printf("Customer : ");
+		scanf("%s", gogek->name);
+		bank->customer[bank->rear] = gogek;
+		++(bank->rear);
+		(bank->rear) %= bank->size;
+		return 1;
+	}
+	else {
+		printf("대기열이 모두 찼습니다. 초기화면으로 돌아갑니다.\n");
+		return 0;
+	}
+	
+}
+
+int dequeue_array(queue_array* bank) {
+	if (check_queue_array_empty(bank)) {
+		printf("customer : %s\n", bank->customer[bank->front]);
+		free(bank->customer[bank->front]);
+		++(bank->front);
+		bank->front %= bank->size;
+		return 1;
+	}
+	else {
+		printf("대기열이 없습니다. 초기화면으로 돌아갑니다.\n");
+	}//비어있는 경우
+}
+```
+각각 큐에 데이터를 삽입하는 Enqueue 역할의 함수와 큐에 있는 데이터를 뽑아오는 Dequeue역할의 함수입니다.
+
+Enqueue의 경우, 배열 형태이기 때문에 큐의 사이즈가 고정되어 있습니다. 그러므로 큐의 size에 빈공간이 있는지를 확인하는 
+check_queue_array_full()가 선행이 됩니다.
+
+Dequeue의 경우, 마찬가지로 존재하지 않는 index를 건들이면 안되므로 큐가 비어있는지 먼저 확인하는 함수 check_queue_array_empty()
+를 호출합니다.
+<br>
+<br>
+<br>
+
+```c
+queue_linked_list* make_queue_linked_list() {
+	queue_linked_list* bank;
+	bank = (queue_linked_list*)malloc(sizeof(queue_linked_list));
+	bank->front = NULL;
+	bank->rear = NULL;
+	return bank;
+}
+```
+링크드 리스트 형태로 구현된 큐 구조 자체를 생성하는 함수입니다. 여기서는 Front와 Rear를 동적할당되는 링크드 리스트의 노드 주소값으로 구분합니다.
+<br>
+<br>
+<br>
+
+```c
+int enqueue_linked_list(queue_linked_list* bank) {
+	Node* new_node = (Node*)malloc(sizeof(Node));
+	printf("Customer : ");
+	scanf("%s", new_node->name);
+	
+	new_node->next = NULL;
+	if (bank->front == NULL && bank->rear == NULL) {
+		bank->front = new_node;
+		bank->rear = new_node;
+		return 1;
+	}
+	else {
+		bank->rear->next = new_node;
+		bank->rear = new_node;
+		return 1;
+	}
+}
+
+int dequeue_linked_list(queue_linked_list* bank) {
+	Node* tmp;
+	if (bank->front == NULL && bank->rear == NULL) {
+		printf("현재 대기열은 비어있습니다. 메뉴로 돌아갑니다.\n");
+		return 0;
+	}
+	if (bank->front != NULL) {
+		printf("customer : %s\n", bank->front->name);
+		tmp = bank->front;
+		bank->front = bank->front->next;
+		if (tmp == bank->rear )bank->rear = NULL;
+		free(tmp);
+		return 1;
+	}
+	else {
+		printf("현재 대기열은 비어있습니다. 메뉴로 돌아갑니다.\n");
+		return 0;
+	}
+}
+```
+각각 링크드 리스트로 구현된 큐에 데이터를 삽입하는 enqueue함수와 데이터를 추출하는 dequeue함수입니다.
+
+enqueue_linked_list()함수의 경우, 간단하게 새로운 데이터를 추가하기 전에 현재 rear가 가리키는 node의 
+next 주소를 추가하려는 새로운 데이터를 가리키도록 합니다. 그리고 마지막으로 rear가 새롭게 추가된 데이터 노드를 지칭하게 합니다.
+
+dequeue_linked_list()함수의 경우, enqueue_linked_list()보다는 노드의 수정이 약간 복잡합니다.
+비어있는 큐가 아니라면, dequeue각 일어나는데 dequeue를 하기전에 rear가 가리키는 노드를 따로 저장해야합니다.
+
+이는 만약 큐가 하나의 노드만 가지고 있다면, front와 rear의 주소를 초기화해야 합니다. 이를 알기 위해서 tmp라는 변수에 따로 dequeue된
+노드의 주소를 저장하였습니다.
+<br>
+<br>
+<br>
+
+***
 
 ## 결과
+
+1. 배열 큐
+
+![실행화면](./image/result1.JPG)
+
+<br>
+<br>
+
+2. 링크드 리스트 큐
+
+![실행화면](./image/result2.JPG)

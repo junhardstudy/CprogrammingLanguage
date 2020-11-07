@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#pragma warning (disable:4996)
 
 /************************************************
 	data_variable_for_array
