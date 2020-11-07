@@ -97,7 +97,6 @@ typedef struct {
 struct linked_data_inner* next;
 ```
 
-링크드 리스트 대입 사진
 <br>
 <br>
 <br>
