@@ -301,25 +301,25 @@ Node* search(Node* bst, char* target, int (*cmp)(void* a, void* b)) {
 
 c -> a -> y -> c -> a -> d 순으로 입력하는 경우 입니다.
 
-![result](r1.JPG)
+![result](./image/r1.JPG)
 
-![result](r2.JPG)
+![result](./image/r2.JPG)
 
-![result](r3.JPG)
+![result](./image/r3.JPG)
 
-![result](r4.JPG)
+![result](./image/r4.JPG)
 
-![result](r5.JPG)
+![result](./image/r5.JPG)
 
-![result](r6.JPG)
+![result](./image/r6.JPG)
 
 <br>
 <br>
 
 ***
 
-![result](r8.JPG)
+![result](./image/r8.JPG)
 
-![result](r9.JPG)
+![result](./image/r9.JPG)
 
 삭제
