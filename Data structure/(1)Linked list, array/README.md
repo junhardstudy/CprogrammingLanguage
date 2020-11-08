@@ -507,20 +507,28 @@ i = 0;
 
 이러한 알고리즘을 (23+56)/2+21*2+16-13 수식을 이용해서 예를 들겠습니다.
 
+<table>
+
+<tr><td>
+
 먼저 왼쪽 괄호 '('를 스택에 넣습니다. 이는 우선순위가 높은 괄호가 등장하기 때문입니다. 
 
 stack_operatror : (
 
 postfix : 
-<br>
-<br>
+
+</td></tr>
+<tr><td>
+
 다음으로 23 숫자가 등장하므로, postfix notation에 바로 적습니다.
 
 stack_operatror : (
 
 postfix : 23
-<br>
-<br>
+
+</td></tr>
+<tr><td>
+
 다음은 +연산자가 등장하므로, 연산자 스택을 조사합니다. 현재 ( 괄호만 저장되어 있으므로 따로 pop할 필요가 없습니다.
 
 따라서 +연산자를 연산자 스택에 push 해놓습니다.
@@ -528,47 +536,62 @@ postfix : 23
 stack_operatror : ( +
 
 postfix : 23
-<br>
-<br>
+
+</td></tr>
+<tr><td>
+
 다음은 56 숫자가 등장하므로, postfix notation에 바로 적습니다.
 
 stack_operatror : (
 
 postfix: 23 56
-<br>
-<br>
+
+</td></tr>
+<tr><td>
+
 다음으로 닫힌 괄호가 등장합니다. 이는 왼쪽 괄호가 등장하기 전까지 연산자 스택을 pop하면서 postfix에 바로 적습니다.
 
 stack_operatror : empty
 
 postfix : 23 56 +
-<br>
-<br>
+
+</td></tr>
+<tr><td>
+
 다음으로 / 연산자입니다. 피연산자(숫자)가 등장하기 전이므로, 스택이 비어있으므로 스택 연산자에 넣게 됩니다.
 
 stack_operatror : /
 
 postfix : 23 56 + 
-<br>
-<br>
+
+</td></tr>
+<tr><td>
+
 다음은 숫자 2입니다. 마찬가지로 숫자는 바로 적습니다.
 
 stack_operatror : /
 
 postfix : 23 56 + 2
-<br>
-<br>
+
+</td></tr>
+<tr><td>
+
 다음은 +연산자 입니다.스택을 검사하면 현재 스택 연산자에는 / 연산자가 있습니다. 따라서 +보다 우선순위가 높은 연산자가 나올때까지
 스택연산자를 pop하게 됩니다. 스택 연산자에는 / 연산자만 있고, /연산자를 만나면 /을 pop하고 +연산자를 연산자 스택에 넣습니다.
 
 stack_operatror : +
 
 postfix : 23 56 + 2 /
-<br>
-<br>
+
+</td></tr>
+<tr><td>
+
 이와 같은 과정을 반복하면 아래와 같은 postfix notation이 완성됩니다.
 
 postfix : 23 56 + 2 / 21 2 * + 16 + 13 -
+
+</td></tr>
+</table>
 
 ***
 
