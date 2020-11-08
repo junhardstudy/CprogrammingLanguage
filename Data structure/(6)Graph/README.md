@@ -22,13 +22,13 @@
 
 Terminology
 
-1. Path : 인접한 노드로 구성된 일련의 sequence
+* Path : 인접한 노드로 구성된 일련의 sequence
 
-2. Cycle : 어떤 노드에서 시작해 다른 노드를 거치지 않고 바로 자기 자신 노드에서 끝나는 경로(path)
+* Cycle : 어떤 노드에서 시작해 다른 노드를 거치지 않고 바로 자기 자신 노드에서 끝나는 경로(path)
 
-3. Loop : 간선의 end point가 같은 경우
+* Loop : 간선의 end point가 같은 경우
 
-4. Complete Graph : 주어진 node에 대해서 최대한의 edge를 가지는 graph
+* Complete Graph : 주어진 node에 대해서 최대한의 edge를 가지는 graph
 
 ## Adjacency matrix
 
