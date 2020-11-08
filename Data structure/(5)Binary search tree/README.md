@@ -10,9 +10,7 @@
 
 Node가 추가되거나 삭제될때, binary search tree의 속성을 만족해야 하기 때문입니다.
 
-<tabble>
-<tr>
-<td>
+
 
 ### 1. Insert
 
@@ -41,28 +39,41 @@ Node조건 이므로 왼쪽 Node에 새로운 Node를 추가하게됩니다.
 
 트리의 깊이가 h라면, 연산 시간에대한 최대 boundary는 O(h)가 됩니다.
 
-</td>
-</tr>
-
-<tr>
-<td>
 
 ### 2. Delete
 
 Delete연산의 경우, tree의 속성을 만족시키면서 Node의 제거가 이루어져야 합니다. 따라서 발생할 수 있는 4가지 case에 대한 delete처리는
 아래와 같습니다.
 
+<table>
+<tr>
+<td>
+
 1. 삭제할 Node가 leaf Node인 경우, 단순히 leaft Node를 제거해주면 됩니다. 단, 부모 Node에서 연결되어 있던 link에 대해서는 끊어졌(Null)다는 것을 명시할 필요가 있습니다.
+
+</td>
+</tr>
+<tr>
+<td>
 
 2. 삭제할 Node가 left subtree만 가지고 있는 경우 입니다. 해당 Node를 삭제하고, 삭제된 Node의 자리는 left child Node로 대체합니다.
 
+</td>
+</tr>
+<tr>
+<td>
+
 3. 삭제할 Node가 right subtree만 가지고 있는 경우 입니다. 해당 Node를 삭제하고, 삭제된 Node의 자리는 right child Node로 대체합니다.
+
+</td>
+</tr>
+<tr>
+<td>
 
 4. 삭제할 Node가 left subtree와 right subtree 둘 다 가지고 있는 경우 입니다. 이 경우, 삭제되는 Node의 <strong>left subtree중 가장 큰 값</strong>을 가져오거나, <strong>right subtree중 가장 작은 값</strong>이 삭제된 Node의 자리를 대체합니다.
 
 </td>
 </tr>
-
 </table>
 
 ## Generic Coding
