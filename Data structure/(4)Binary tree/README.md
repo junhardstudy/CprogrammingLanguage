@@ -156,7 +156,7 @@ recursion이므로, <strong>모두 종료조건이 반드시 로직에서 선행
 
 <table>
 
-<tr>
+<tr><td>
 
 1. Preorder
 
@@ -165,9 +165,9 @@ center -> left subtree -> right subtree
 preorder의 경우, center(자기 자신 node)를 먼저 출력하고 left subtree에 대해서 다시 재귀함수를 호출하게 됩니다. 만약에 left subtree가 없다면
  right subtree에 대해서 재귀함수를 호출합니다.
 
-</tr>
+</td></tr>
 
-<tr>
+<tr><td>
 
 2. Inorder
 
@@ -176,9 +176,9 @@ left subtree -> center -> right subtree
 inorder의 경우, 현재 node에서 left subtree가 존재하면 left subtree에 대해서 다시 재귀함수를 호출합니다. left subtree가 없다면 자기 자신을 출력하고
 right subtree에 대해서 다시 재귀함수를 호출합니다. right subtree의 경우, left subtree가 없다면 자기 자신을 출력합니다.
 
-</tr>
+</td></tr>
 
-<tr>
+<tr><td>
 
 3. Postorder
 
@@ -187,7 +187,7 @@ left subtree -> right subtree -> center
 postorder의 경우, left subtree와 right subtree가 모두 없을 때 자기 자신을 출력할 수 있습니다. 만약 left 또는 right subtree가 존재할 경우,
  순차적으로 각각 재귀함수를 호출하게 됩니다.
 
-</tr>
+</td></tr>
 
 </table>
 
