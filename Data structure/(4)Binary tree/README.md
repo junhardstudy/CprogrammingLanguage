@@ -154,7 +154,7 @@ void print_postorder(CBT_Node* cbt) {//left_subtree -> right_subtree -> center
 DFS를 이용하여, preorder, inorder, postorder순으로 각각 탐색해주는 함수입니다. recursion으로 구현하였습니다.
 recursion이므로, <strong>모두 종료조건이 반드시 로직에서 선행되어야 합니다.</strong>
 
-<div style="height: auto; width: 100%; border:1px solid black;">
+<div style="height: auto; width: 100%; border:1px solid gold;">
 
 1. Preorder
 
