@@ -294,15 +294,136 @@ input.txt 파일로부터 인접 리스트를 만드는 행렬입니다. flag변
 먼저 그래프를 구성하고 있는 node의 개수만큼, vtx 구조체를 할당하고 초기화합니다. 즉, 노드 A, B, C, D, E, F, G, H를 가지는 vtx구조체들입니다. 현재 연결 확인은 안되어 있으므로 
 모두 link가 null로 초기화 되어있습니다.
 
+동적할당된 vtx 구조체들(ver_tmp)은 배열처럼 연속적으로 참조할 수 있습니다. 이를 이용해, read_matrix때와 마찬가지로 vtx 구조체 배열에 인덱스를 더함으로써 arc를 생성할 수 있습니다.
+
+arc 생성에 대한 구체적인 로직은, input의 일부분을 가져와 예시를 들겠습니다.
+
+<table>
+<tr>
+<td>A</td>
+<td>C</td>
+</tr>
+<tr>
+<td>A</td>
+<td>B</td>
+</tr>
+<tr>
+<td>B</td>
+<td>E</td>
+</tr>
+</table>
+
+<br>
+<br>
+
+<table>
+<tr><td>
+현재 처음으로 arc의 연결을 확인하므로, 모든 node들은 아직 arc를 가지고 있지 않습니다.
+첫번째 행에서 A와 C가 연결되어 있습니다. 따라서 A node가 참조 되면, A node의 arc를 만든다음 C node에 link를 연결해줍니다.
+</td></tr>
+<tr><td>
+다음 행으로 넘어가서, A와 B가 연결되어 있고, A가 더이상 null link(arc)가 아닙니다. 이는 A가 위에서 C와 이미 arc로 연결되어 있음을 의미합니다.
+따라서 링크드 리스트의 탐색처럼, arc가 가리키는 다음이 null이 나올 때까지 검색을 하게됩니다. 여기서는 C에 연결된 arc가 마지막 arc이므로
+해당 arc의 destination를 B로 link하게 됩니다.
+</td></tr>
+<tr><td>
+마지막으로 B와 E의 연결입니다. node B의 경우, link(arc)가 아직 null이므로 arc를 새로 동적할당하고 arc가 가리키는 목적지를 Node E로 합니다.
+</td></tr>
+</table>
+
+<br>
+<br>
+<br>
+
+```
+void print_BFT_list(GRAPH* g, int vertex) {
+	int i, j, k;
+	QUEUE* q;
+	char* read;
+	Arc* arc_tmp;
+	Vtx* tmp = g->first;//개개의 vertex는 행렬로 생각하면 됨.
+	q = (QUEUE*)malloc(sizeof(QUEUE));
+	q->end = NULL;
+	q->first = NULL;
+	
+	//vertex자체를 큐에 저장
+	ENQ(q, (tmp + vertex));
+	(tmp + vertex)->flag = 1;
+	
+	while (q->size != 0) {
+		tmp = DEQ(q);//vertex자체를 return
+		read = tmp->data;
+		printf("%c ", *read);
+	
+		arc_tmp = tmp->arc;
+		while (arc_tmp != NULL) {//arc 간선에 연결되어있는 노드, or vertex를 큐에 저장
+			tmp = arc_tmp->destination;
+			if (tmp->flag == 1) {
+				arc_tmp = arc_tmp->nextArc;
+				continue;
+			}
+			ENQ(q, arc_tmp->destination);
+			tmp->flag = 1;
+			arc_tmp = arc_tmp->nextArc;
+		}
+	}
+
+	tmp = g->first;
+	for (i = 0; i < 8; i++) {
+		(tmp + i)->flag = 0;
+	}//출력이 끝나면 다시 flag 초기화	
+}
+```
 
 
+```c
+void print_DFT_list(GRAPH* g, int vertex) {
+	//pop 하고 난 다음에 바로 출력
+	int i;
+	Vtx* tmp;
+	Arc* arc_tmp;
+	STACK* s;
+	char* tmp_str;
+	s = (STACK*)malloc(sizeof(STACK));
+	s->size = 0;
+	s->top = NULL;
+	tmp = g->first;
+	tmp = tmp + vertex;
+	PUSH_stack(s, tmp);//vertex자체가 stack에 들어가야함.
+	tmp->flag = 1;
+	while (s->size != 0) {
+		tmp = POP_stack(s);
+		tmp_str = tmp->data;
+		printf("%c ", *tmp_str);
+		tmp->flag = 1;
+		//arc, 간선 개수만큼 vertex를 stack 저장
+		//이미 access 한적있으면 flag == 1 조건으로 점프
+		arc_tmp = tmp->arc;
+		while (arc_tmp != NULL) {
+			tmp = arc_tmp->destination;
+			if (tmp->flag == 1) {
+				arc_tmp = arc_tmp->nextArc;
+				continue;
+			}
+			
+			PUSH_stack(s, tmp);
+			tmp->flag = 1;
+			arc_tmp = arc_tmp->nextArc;
+		}
+	}
+
+	tmp = g->first;
+	for (i = 0; i < 8; i++) {
+		(tmp + i)->flag = 0;
+	}//출력이 끝나면 다시 flag 초기화
+
+}
+```
 
 
- 
-
-
-
-
+<br>
+<br>
+<br>
 
 
 ```c
