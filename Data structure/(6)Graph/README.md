@@ -552,3 +552,5 @@ MST에서 최소 weight를 가진 arc와 연결된 vertex를 찾을 때, 현재 
 
 
 ## 결과
+
+![result](./image/result.JPG)

@@ -704,6 +704,9 @@ void* prim_algo(void* graph, int VtxNumber) {
 	mst1 = (MST*)malloc(sizeof(MST));
 	mst1->vertex = (Vtx**)malloc(sizeof(Vtx)*VtxNumber);
 	vertex_with_arc = (VA*)malloc(sizeof(VA)*(VtxNumber -1 ));
+	
+	min_arc = NULL;
+	
 	mst1->number_of_vertex = 0;
 	
 	read = ((GRAPH*)graph)->first;
