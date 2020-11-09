@@ -528,4 +528,27 @@ void* prim_algo(void* graph, int VtxNumber) {
 
 Prime 알고리즘을 이용하여, 최소 신장 트리를 찾는 함수입니다.
 
+각 vertex들은 flag라는 변수를 통해, 이미 참조된(tree에 들어있는) vertex인지 확인하게 됩니다.
+
+<br>
+<br>
+<br>
+
+
+```c
+while (arc_tmp != NULL) {
+	destination = arc_tmp->destination;
+	if (arc_tmp->weight < min_tmp && destination->flag == 0) {
+		min_tmp = arc_tmp->weight;
+		min_arc = arc_tmp;
+		from_vertex = read;
+		}
+		arc_tmp = arc_tmp->nextArc;			
+}
+``` 
+MST에서 최소 weight를 가진 arc와 연결된 vertex를 찾을 때, 현재 weight의 합 min_tmp보다 잡고 아직 방문하지 않은 vertex( flag == 0)이라면
+후보 arc(min_arc)에 들어가게 됩니다.
+
+
+
 ## 결과
