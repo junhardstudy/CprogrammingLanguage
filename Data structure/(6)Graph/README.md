@@ -325,10 +325,10 @@ arc 생성에 대한 구체적인 로직은, input의 일부분을 가져와 예
 다음 행으로 넘어가서, A와 B가 연결되어 있고, A가 더이상 null link(arc)가 아닙니다. 이는 A가 위에서 C와 이미 arc로 연결되어 있음을 의미합니다.
 
 
+
 따라서 링크드 리스트의 탐색처럼, arc가 가리키는 다음이 null이 나올 때까지 검색을 하게됩니다. 여기서는 C에 연결된 arc가 마지막 arc이므로
-
-
 해당 arc의 destination를 B로 link하게 됩니다.
+
 </td></tr>
 <tr><td>
 마지막으로 B와 E의 연결입니다. node B의 경우, link(arc)가 아직 null이므로 arc를 새로 동적할당하고 arc가 가리키는 목적지를 Node E로 합니다.
