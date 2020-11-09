@@ -106,9 +106,11 @@ void insertion_sort(void* data, int number) {
 	
 }
 ```
-삽입 정렬을 수행하는 함수입니다. generic coding을 이용하여 void 포인터를 파라미터로 받기 때문에 숫자, 또는 문자가 들어와도 정렬할 수 있습니다.
+삽입 정렬을 이용하여 오름차순으로 정렬하는 함수입니다. generic coding을 이용하여 void 포인터를 파라미터로 받기 때문에 숫자, 또는 문자가 들어와도 정렬할 수 있습니다.
 
-정렬이 실질적으로 이루어지는 부분은 반복문 부분입니다. 먼저 i번째 원소 값을 가져와 
+정렬이 실질적으로 이루어지는 부분은 반복문입니다. 먼저 i번째 원소 값(정렬되지 않은 sublist에 위치)을 가져와 i-1에서부터 0번째까지 원소들(정렬된 sublist에 위치)과
+ 크기를 비교합니다. 만약 넣을 위치를 아직 발견하지 못했다면, 원소들의 값이 보다 큰 값을 가지고 있다는뜻입니다. 따라서 한칸씩 밀게 됩니다. 반면에 원소들중에서 보다 작은 값의
+ 위치가 처음으로 발견이 되면 임시 변수(tmp_value)에 넣어두었던 값을 대입합니다.
 
 <br>
 <br>
@@ -148,6 +150,11 @@ void selection_sort(void* data, int number) {
 	delete_data(dup_data, number);
 }
 ```
+선택 정렬을 이용하여 오름차순으로 정렬하는 함수입니다. 배열의 0번째 index부터 시작하여 마지막 index까지 위치한 값을 기준(min_data)으로 하여 가장 작은 원소값과 위치를
+교환합니다.(swap)
+
+여기서는 swap이 필요하므로, 임시변수(tmp_value)를 이용합니다.
+
 
 <br>
 <br>
@@ -180,6 +187,10 @@ void bubble_sort(void* data, int number) {
 	delete_data(dup_data, number);
 }
 ```
+버블 정렬을 이용하여 오름차순으로 정렬하는 함수입니다. 배열의 index = 0에서부터 배열의 end - 1 index까지 인접한 원소들의 크기를 비교하면서, 큰 원소가 오른쪽으로 가도록 하여 
+물결이 일렁이듯이 정렬하게 됩니다.
+
+마찬가지로, bubbling을 할 때마다 swap이 일어나므로 임시변수(tmp_value)가 필요합니다.
 
 <br>
 <br>
@@ -196,6 +207,10 @@ void merge_sort(void* sorted, void* data, int left, int right) {
 
 }
 ```
+
+오름 차순으로 정렬하는 Merge sort에서 분할을 담당하는 부분입니다. 반으로 나눌 수 있는 조건이라면 재귀를 통해 정렬되지 않은 리스트를 부분적으로 1/2씩 나누게 됩니다.
+
+주의할점은 재귀 함수이기때문에, <strong>반드시 종료조건이 로직에서 먼저 선행되어야 합니다.</strong>
 
 <br>
 <br>
@@ -231,6 +246,8 @@ void merge(int* sorted, int* data, int left, int right) {
 
 }
 ```
+Merge sorting에서 위에서 분할된 리스트들에 대해 정렬하면서 합병(combine)하는 함수입니다. 정렬되면서 합명이 되므로, 원본 data(int *data)와 크기가
+똑같으면서 정렬된 원소들이 담길(int *sorted) 배열 공간이 필요합니다.
 
 <br>
 <br>
