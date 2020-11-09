@@ -6,11 +6,13 @@
 
 3. Adjacency list에 그래프의 가중치를 추가하여 구현 해 봅니다.
 
-4. 3에서 구현된 graph를 이용하여 특정 input파일을 받아 minimum spanning tree와 Dikstra 알고리즘을 이용하여 shortest path를 구합니다.
+4. 3에서 구현된 graph를 이용하여 특정 input파일을 받아 minimum spanning tree를 구합니다.
 
 ## Graph
 
-> 모든 node(vertex)들이 edge(arc)에 의해 연결된 형태입니다. 
+![그림](./image/graphs.png)
+
+ 모든 node(vertex)들이 edge(arc)에 의해 연결된 형태입니다. 
 
 1. Directed graph : 간선에 방향성이 있는 그래프로, vertex와 arc를 가집니다.
 
@@ -34,13 +36,13 @@ Terminology
 
 Graph의 node(or vertex)와 edge(arc)를 2 dimensional의 array로 나타낸 형태입니다.
 
-![그림](t.jpg)
+![그림](./image/adjmat.png)
 
 ## Adjacency list
 
 Graph의 node(or vertex)와 edge(arc)를 리스트로 나타낸 형태입니다. 소스코드에서는 링크드 리스트로 구현되어 있는것을 확인할 수 있습니다.
 
-![그림](t.jpg)
+![그림](./image/adjlist.png)
 
 ## Graph에 대한 탐색(traversal) 방법
 
@@ -52,7 +54,7 @@ Graph의 node(or vertex)와 edge(arc)를 리스트로 나타낸 형태입니다.
 
 backtracking은 재귀호출을 이용하거나, 스택으로 구현할 수 있습니다.
 
-![그림](t.jpg)
+![그림](dfs.png)
 
 2. BFS
 
@@ -60,7 +62,7 @@ backtracking은 재귀호출을 이용하거나, 스택으로 구현할 수 있�
 
 어떤 node의 인접한 행렬들을 먼저 탐색하므로 queue를 이용하여 구현할 수 있습니다.
 
-![그림](t.jpg)
+![그림](bfs.png)
 
 ## Minimum spanning tree
 
@@ -75,10 +77,6 @@ backtracking은 재귀호출을 이용하거나, 스택으로 구현할 수 있�
 이 과제에서는 Prim 알고리즘을 사용하여 구현하였습니다.
 
 
-## Dikstra's algorithm
-
-최단 경로(shortest path)를 찾는 알고리즘입니다.
-
 ***
 
 ## 소스코드
@@ -86,5 +84,89 @@ backtracking은 재귀호출을 이용하거나, 스택으로 구현할 수 있�
 ```c
 
 ```
+
+
+```c
+void* prim_algo(void* graph, int VtxNumber) {
+	int count;
+	int min_tmp;
+	Vtx* min_vertex;
+	Vtx* from_vertex;
+	Vtx* read;
+	Vtx* access;
+	Vtx* access2;
+	Vtx* destination;
+	MST* mst1;
+	Arc* arc_tmp;
+	Arc* min_arc;
+	VA* va_read;
+	VA* vertex_with_arc;
+	char* str_tmp;
+	int i;
+	int total = 0;
+
+
+	Vtx* test;
+	char* test_str;
+	mst1 = (MST*)malloc(sizeof(MST));
+	mst1->vertex = (Vtx**)malloc(sizeof(Vtx)*VtxNumber);
+	vertex_with_arc = (VA*)malloc(sizeof(VA)*(VtxNumber -1 ));
+	mst1->number_of_vertex = 0;
+	
+	read = ((GRAPH*)graph)->first;
+
+	*(mst1->vertex) = read;
+	++(mst1->number_of_vertex);
+	read->flag = 1;
+
+	while (mst1->number_of_vertex < VtxNumber) {
+		count = 0;
+		min_tmp = 999999; 
+		from_vertex = NULL;
+
+		//MST에서 최저 weight를 가진 arc와 연결된 vertex(아직 연결되지 않은) 찾기
+		while (count < mst1->number_of_vertex) {
+			read = *(mst1->vertex + count);
+			arc_tmp = read->arc;
+			
+			//destination = arc_tmp->destination;
+			while (arc_tmp != NULL) {
+				destination = arc_tmp->destination;
+				if (arc_tmp->weight < min_tmp && destination->flag == 0) {
+					min_tmp = arc_tmp->weight;
+					min_arc = arc_tmp;
+					from_vertex = read;
+				}
+				arc_tmp = arc_tmp->nextArc;
+				
+				
+			}
+			count++;
+		}
+		*(mst1->vertex + count) = min_arc->destination;
+
+		test = from_vertex;
+		test_str = test->data;
+		printf("%c-",*test_str);
+
+		test = min_arc->destination;
+		test_str = test->data;
+		printf("%c\n", *test_str);
+
+		access = min_arc->destination;
+		access->flag = 1;
+		
+		access = *(mst1->vertex +(count - 1));
+
+		access = from_vertex;
+		
+		++(mst1->number_of_vertex);
+		
+	}
+
+}
+```
+
+Prime 알고리즘을 이용하여, 최소 신장 트리를 찾는 함수입니다.
 
 ## 결과
