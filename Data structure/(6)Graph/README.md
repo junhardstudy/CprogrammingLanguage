@@ -546,7 +546,7 @@ while (arc_tmp != NULL) {
 		arc_tmp = arc_tmp->nextArc;			
 }
 ``` 
-MST에서 최소 weight를 가진 arc와 연결된 vertex를 찾을 때, 현재 weight의 합 min_tmp보다 잡고 아직 방문하지 않은 vertex( flag == 0)이라면
+MST에서 최소 weight를 가진 arc와 연결된 vertex를 찾을 때, 현재 weight의 합 min_tmp보다 작고 아직 방문하지 않은 vertex( flag == 0)이라면
 후보 arc(min_arc)에 들어가게 됩니다.
 
 
