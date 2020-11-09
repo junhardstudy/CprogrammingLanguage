@@ -17,17 +17,26 @@
 정렬되지 않은 sublist의 첫번째 원소를 정렬된 sublist에 들어갈 알맞은 자리(index)를 찾은 후, 해당 자리 이후에 위치하는 원소들을 한칸 씩 밀어서 자리를 확보합니다.
 (wall이 한칸씩 밀린다고 생각)
 
+<br>
+<br>
+
 2. Selection sorting
 
 마찬가지로 정렬된 sublist와 정렬이 되지 않은 sublist로 나누고, wall 이라는 개념을 이용하여 둘을 구분합니다.
 
 오름 차순으로 정렬한다면, 정렬이 되지 않은 sublist에서 가장 작은 값을 가져와 정렬되지 않은 sublist의 첫번째 원소와 swap하고 wall을 한 칸씩 밀어 정렬된 sublist에 포함하게 합니다.
+
+<br>
+<br>
  
 3. Bubble sorting
 
 인접한 두개의 원소를 비교하여 swap하는 방식으로 정렬하는 방법입니다.
 
 오름차순으로 정렬한다면, 인접한 두 원소를 비교할 때 작은개 왼쪽에 위치하도록 합니다.
+
+<br>
+<br>
 
 4. Merge sorting
 
@@ -37,11 +46,16 @@ quick sorting과 더불어서, 하나의 큰 문제(전체 정렬 되지 않은 
 
 아래 소스코드에서는 recursion으로 구현하였습니다.
 
+<br>
+<br>
+
 5. Quick sorting
 
 정렬되지 않은 list에서 pivot하나를 고르고, 해당 pivot을 기준으로 대소 비교를 하여 작은값은 pivot의 왼쪽에, 큰 값은 pivot의 오른쪽에 넣는 partition과정을 
 pivot을 제외한 모든 원소가 정렬될때 까지 수행합니다.
 
+<br>
+<br>
 
 ***
 
@@ -53,9 +67,10 @@ pivot을 제외한 모든 원소가 정렬될때 까지 수행합니다.
 
 1. target과 list내의 중간에 위치한 원소(middle)와 비교합니다.
 
-2-1. middle 원소보다 작다면, list의 왼쪽 sublist에 위치하므로 현재 middle(old)원소가 upper bound가 되고, new middle은 (old middle)/2 가 됩니다.
+2. 
+	1. middle 원소보다 작다면, list의 왼쪽 sublist에 위치하므로 현재 middle(old)원소가 upper bound가 되고, new middle은 (old middle)/2 가 됩니다.
 
-2-2. middle 원소보다 크다면, list의 오른쪽 sublist에 위차하므로 현재 middle(old)원소가 lower bound가 되고, new middle은 (upper bound - old middle)/2 가 됩니다.
+	2. middle 원소보다 크다면, list의 오른쪽 sublist에 위차하므로 현재 middle(old)원소가 lower bound가 되고, new middle은 (upper bound - old middle)/2 가 됩니다.
 
 3. 위 과정을 target 원소를 찾을 때까지, 또는 더 이상 비교할 수 있는 원소가 없을 때까지 반복합니다.
 
@@ -263,6 +278,9 @@ void quick_sort(int* data, int left, int right) {
 	}
 }
 ```
+Quick sort에서 정렬되지 않은 배열에 위치한 pivot을 하나 정해 partition하는 과정을 recursion으로 구현한 함수입니다.
+
+마찬가지로 <strong>recursion의 종료조건이 로직에서 선행</strong>되어야 합니다.
 
 <br>
 <br>
@@ -298,6 +316,9 @@ int partition(int* data, int left, int right) {
 	return sub_right;
 }
 ```
+Quick sort에서 실질적으로 partition된 각각의 배열에 위치한 원소들을 pivot기준으로 정렬하는 함수입니다. pivot은 넘겨받는 배열의 left(왼쪽에서 첫번째)가 됩니다.
+
+quick_sort()함수가 재귀적으로 호출될때마다, 변경된 배열의 index(left, right, pivot)를 이용하여 부분적으로 정렬하게 됩니다.
 
 <br>
 <br>
@@ -325,6 +346,8 @@ void bin_search(int* data, int number, int target_data) {
 	printf("data가 존재하지 않습니다!\n");
 }
 ```
+이진 탐색을 담당하는 함수입니다. 배열의 index들(left, middle, right)이 target의 값과 middle 원소의 값 대소 비교를 통해 변경이 되며,
+ 탐색시 고려해야 될 범위가 1/2씩 줄어들게 됩니다.
 
 <br>
 <br>
@@ -355,6 +378,18 @@ void push_hash(hash_elements* table, int* data) {
 	}
 }
 ```
+
+Hashed search를 구현하기 위해, hash function와 hash table에 데이터와 key를 mapping하는 함수입니다. 
+
+Hash function인 hashing()함수는 key값이 data value를 2의 제곱을 곱한 다음 hash table이 가질수 있는 최대 크기 max_table로 나머지(mod) 연산한
+값을 가집니다.
+
+> key = (data^2) mod 10000
+
+<br>
+<br>
+
+hash table에 데이터와 key값을 넣는 함수 push_hash()에서는 같은 key값의 발생으로 인한 collision을 방지하기 위해 chaining을 사용하였습니다.
 
 <br>
 <br>
@@ -392,6 +427,9 @@ void find_item(hash_elements* table, int data) {
 	else printf("해당 데이터는 존재하지 않습니다!\n");
 }
 ```
+hash 구조를 생성하는 함수 hash_problem()과 hased search를 수행하는 find_item()함수입니다.
+
+이진탐색과 다르게 해쉬검색에서는 중복되는 데이터가 없으면 해쉬값(address)만 알면 바로 data를 찾을 수 있습니다.
 
 <br>
 <br>
@@ -406,9 +444,11 @@ void find_item(hash_elements* table, int data) {
 
 ***
 
-## 출처
+## 출처 및 참고 문헌
 
-Merge sort : 
+Merge sort : https://ko.wikipedia.org/wiki/%ED%95%A9%EB%B3%91_%EC%A0%95%EB%A0%AC , PPT 강의 자료
 
 Quick sort : https://ko.wikipedia.org/wiki/%ED%80%B5_%EC%A0%95%EB%A0%AC , PPT 강의 자료
+
+Hash : http://wiki.hash.kr/index.php/%ED%95%B4%EC%8B%9C , PPT 강의 자료
 
