@@ -54,7 +54,7 @@ Graph의 node(or vertex)와 edge(arc)를 리스트로 나타낸 형태입니다.
 
 backtracking은 재귀호출을 이용하거나, 스택으로 구현할 수 있습니다.
 
-![그림](dfs.png)
+![그림](./image/dfs.png)
 
 2. BFS
 
@@ -62,7 +62,7 @@ backtracking은 재귀호출을 이용하거나, 스택으로 구현할 수 있�
 
 어떤 node의 인접한 행렬들을 먼저 탐색하므로 queue를 이용하여 구현할 수 있습니다.
 
-![그림](bfs.png)
+![그림](./image/bfs.png)
 
 ## Minimum spanning tree
 
