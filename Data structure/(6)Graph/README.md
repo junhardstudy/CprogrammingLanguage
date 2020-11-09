@@ -48,7 +48,7 @@ Graph의 node(or vertex)와 edge(arc)를 리스트로 나타낸 형태입니다.
 
 1. DFS
 
-인접 node를 탐색하기 전에, 해당 vertex의 자식 node들을 먼저 탐색하는 방법입니다.
+인접 node를 탐색하기 전에, 해당 node의 자식 node들을 먼저 탐색하는 방법입니다.
 
 자식 node들을 탐색하고 나면, 부모 node로 돌아와야 하는 backtracking이 필요합니다.
 
@@ -82,8 +82,227 @@ backtracking은 재귀호출을 이용하거나, 스택으로 구현할 수 있�
 ## 소스코드
 
 ```c
+int** make_adj_matrix() {
+	FILE* fp;
+	fp = fopen("input.txt", "r");
+	int** adj_matrix;
+	int** read_matrix;
+	int number_of_vertex;
+	char space;
+	char tmp;
+	int i, j, k, l, count;
 
+	fscanf(fp, "%d", &number_of_vertex);
+	fscanf(fp, "%c", &space);
+	
+	read_matrix = (int**)malloc(sizeof(int) * 9);
+	adj_matrix = (int**)malloc(sizeof(int)*number_of_vertex);
+	
+	for (i = 0; i < 9; i++) 
+		*(read_matrix + i) = (int**)malloc(sizeof(int) * 2);
+
+	for (i = 0; i < number_of_vertex; i++) 
+		*(adj_matrix + i) = (int*)malloc(sizeof(int) * number_of_vertex);
+	
+	for (i = 0; i < number_of_vertex; i++) {
+		for (j = 0; j < number_of_vertex; j++)adj_matrix[i][j] = 0;
+	}
+
+	i = 0;
+	j = 0;
+	while (!feof(fp)) {
+		fscanf(fp, "%c", &tmp);
+		read_matrix[i][j] = tmp - 'A';
+		j++;
+		fscanf(fp, "%c", &space);
+		fscanf(fp, "%c", &tmp);
+		read_matrix[i][j] = tmp - 'A';
+		fscanf(fp, "%c", &space);
+
+		i++;
+		j = 0;
+	}	
+	for (count = 0, i = 0, j = 0, k = 0, l = 0; count < number_of_vertex; count++) {
+		i = read_matrix[k][l];
+		l++;
+		j = read_matrix[k][l];
+
+		adj_matrix[i][j] = 1;
+		l = 0;
+		k++;	
+	}
+	free(read_matrix);
+	fclose(fp);
+	return adj_matrix;
+}
 ```
+input.txt 파일로부터 그래프에 대한 인접행렬을 만드는 함수입니다.
+
+2차원 배열을 더블 포인터로 만들었으며, index의 0부터 8까지는 순서대로 A, B, C, ... , H 노드에 대응합니다.
+
+동적할당된 2차원 배열에 대한 모든 원소값을 0으로 초기화한다음에 파일이 끝날때 까지(feof) 문자열 하나를 읽어들입니다.
+
+그리고 문자'A'와 해당 문자를 뺀 값을 read_matrix[][]의 원소 값으로 넣게 됩니다. read_matrix는 인접 행렬의 행과 열의 값을 담당하고, input file에 대해서는 아래와 같은 값을 가집니다.
+
+<table>
+<tr>
+<td>0</td>
+<td>2</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>5</td>
+</tr>
+<tr>
+<td>4</td>
+<td>6</td>
+</tr>
+<tr>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<td>6</td>
+<td>7</td>
+</tr>
+<tr>
+<td>3</td>
+<td>7</td>
+</tr>
+
+</table>
+
+이는 각행의 첫번째 열의 원소는 인접행렬의 행을, 두번째 열의 원소는 인접행렬의 열에 대응됩니다.
+
+예를 들어, (0,2)의 경우 A와 C가 연결되어 있으므로 인접행렬(adj_matrix)의 (0, 2)에서 1값을 가지게 됩니다.
+
+<br>
+<br>
+<br>
+
+```c
+GRAPH* make_adj_list_graph(int vertexNumber, int exists_weight, char* file_name) {
+	//undirected graph 형성
+	//exists_weight == 0 이면, 가중치가 없는 그래프
+	//exists_weight == 1 이면, 가중치가 있는 그래프
+	GRAPH* g;
+	Vtx* ver_tmp;
+	Vtx* first_ver_tmp;
+	Vtx* second_ver_tmp;
+	Arc* only_read;
+	Arc* arc_tmp;
+	char get[5];
+	char* data_tmp;
+	char space[1];
+	FILE* fp;
+	int i, j, k, count;
+	int weight;
+
+	fp = fopen(file_name, "r");
+	g = (GRAPH*)malloc(sizeof(GRAPH));
+	ver_tmp = (Vtx*)malloc(sizeof(Vtx) * vertexNumber);
+	for (i = 0; i < vertexNumber; i++) {
+		(ver_tmp + i)->next = NULL;
+		data_tmp = (char*)malloc(sizeof(char));
+		*data_tmp = 'A' + i;
+		(ver_tmp + i)->data = data_tmp;
+		(ver_tmp + i)->indegree = 0;
+		(ver_tmp + i)->outdegree = 0;
+		(ver_tmp + i)->flag = 0;
+		(ver_tmp + i)->arc = NULL;
+	}//node, 즉 vertex를 vertex개수만큼 생성합니다.
+	g->first = ver_tmp;
+
+	fgets(get, sizeof(get), fp);
+	
+	while (!feof(fp)) {
+		fgets(get, sizeof(get), fp);
+		i = get[0] - 'A';
+		j = get[2] - 'A';
+		if (exists_weight == 1) {
+			fscanf(fp, "%d", &weight);
+			fscanf(fp, "%c", &space);
+		}
+	
+		
+		first_ver_tmp = (ver_tmp + i);
+		second_ver_tmp = (ver_tmp + j);
+		if (first_ver_tmp->arc == NULL) {
+			arc_tmp = (Arc*)malloc(sizeof(Arc));
+			arc_tmp->destination = second_ver_tmp;
+			arc_tmp->nextArc = NULL;
+			if (exists_weight == 1)arc_tmp->weight = weight;
+			first_ver_tmp->arc = arc_tmp;
+		}
+		else {
+			//printf("done?\n\n");
+			only_read = first_ver_tmp->arc;
+			while (only_read->nextArc != NULL) {
+				only_read = only_read->nextArc;
+			}
+			arc_tmp = (Arc*)malloc(sizeof(Arc));
+			arc_tmp->destination = second_ver_tmp;
+			arc_tmp->nextArc = NULL;
+			if (exists_weight == 1)arc_tmp->weight = weight;
+			only_read->nextArc = arc_tmp;
+		}
+		(first_ver_tmp->outdegree)++;
+		
+	}
+	g->first = ver_tmp;
+	
+	//
+	for (i = 0; i < vertexNumber; i++) {
+		data_tmp = (ver_tmp + i)->data;
+		printf("%d번째(괄호는 가중치) %c", i + 1, *data_tmp);
+		first_ver_tmp = ver_tmp + i;
+		if (first_ver_tmp->arc != NULL) {
+			only_read = first_ver_tmp->arc;
+			while (only_read != NULL) {
+				second_ver_tmp = only_read->destination;
+				data_tmp = second_ver_tmp->data;
+				printf("-%c", *data_tmp);
+				if (exists_weight == 1)printf("(%d)", only_read->weight);
+				only_read = only_read->nextArc;
+			}
+			
+		}
+		printf("\n");
+		
+	}
+
+	//
+	fclose(fp);
+	return g;
+}
+```
+input.txt 파일로부터 인접 리스트를 만드는 행렬입니다. flag변수 exists_weight를 통해 weight가 있는 그래프와 weight가 없는 그래프 모두
+인접 리스트로 표현할 수 있게 하였습니다.
+
+먼저 그래프를 구성하고 있는 node의 개수만큼, vtx 구조체를 할당하고 초기화합니다. 즉, 노드 A, B, C, D, E, F, G, H를 가지는 vtx구조체들입니다. 현재 연결 확인은 안되어 있으므로 
+모두 link가 null로 초기화 되어있습니다.
+
+
+
+
+
+ 
+
+
+
+
 
 
 ```c

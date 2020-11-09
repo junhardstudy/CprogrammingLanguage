@@ -463,29 +463,6 @@ GRAPH* make_adj_list_graph(int vertexNumber, int exists_weight, char* file_name)
 			if (exists_weight == 1)arc_tmp->weight = weight;
 			only_read->nextArc = arc_tmp;
 		}
-		/*
-		first_ver_tmp = (ver_tmp + j);
-		second_ver_tmp = (ver_tmp + i);
-		if (first_ver_tmp->arc == NULL) {
-			arc_tmp = (Arc*)malloc(sizeof(Arc));
-			arc_tmp->destination = second_ver_tmp;
-			arc_tmp->nextArc = NULL;
-			if (exists_weight == 1)arc_tmp->weight = weight;
-			first_ver_tmp->arc = arc_tmp;
-		}
-		else {
-			only_read = first_ver_tmp->arc;
-			while (only_read->nextArc != NULL) {
-				only_read = only_read->nextArc;
-			}
-			arc_tmp = (Arc*)malloc(sizeof(Arc));
-			arc_tmp->destination = second_ver_tmp;
-			arc_tmp->nextArc = NULL;
-			if (exists_weight == 1)arc_tmp->weight = weight;
-			only_read->nextArc = arc_tmp;
-		}
-		*/
-		
 		(first_ver_tmp->outdegree)++;
 		
 	}
