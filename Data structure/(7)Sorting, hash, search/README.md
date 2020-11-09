@@ -12,6 +12,8 @@
 
 1. Insertion sorting
 
+![image](./image/insertion.png)
+
 정렬된 sublist와 정렬이 되지 않은 sublist로 나누고, wall 이라는 개념을 이용하여 둘을 구분합니다.
 
 정렬되지 않은 sublist의 첫번째 원소를 정렬된 sublist에 들어갈 알맞은 자리(index)를 찾은 후, 해당 자리 이후에 위치하는 원소들을 한칸 씩 밀어서 자리를 확보합니다.
@@ -22,6 +24,8 @@
 
 2. Selection sorting
 
+![image](./image/selection.png)
+
 마찬가지로 정렬된 sublist와 정렬이 되지 않은 sublist로 나누고, wall 이라는 개념을 이용하여 둘을 구분합니다.
 
 오름 차순으로 정렬한다면, 정렬이 되지 않은 sublist에서 가장 작은 값을 가져와 정렬되지 않은 sublist의 첫번째 원소와 swap하고 wall을 한 칸씩 밀어 정렬된 sublist에 포함하게 합니다.
@@ -31,6 +35,8 @@
  
 3. Bubble sorting
 
+![image](./image/bubble.png)
+
 인접한 두개의 원소를 비교하여 swap하는 방식으로 정렬하는 방법입니다.
 
 오름차순으로 정렬한다면, 인접한 두 원소를 비교할 때 작은개 왼쪽에 위치하도록 합니다.
@@ -39,6 +45,8 @@
 <br>
 
 4. Merge sorting
+
+![image](./image/merge.png)
 
 전체 원소를 한개의 원소로 <strong>분할한 후(divide)</strong>, 분할 된 원소들을 다시 <strong>병합(merge)하면서 정렬</strong>하는 방법입니다.
 
@@ -51,6 +59,8 @@ quick sorting과 더불어서, 하나의 큰 문제(전체 정렬 되지 않은 
 
 5. Quick sorting
 
+![image](./image/quick.png)
+
 정렬되지 않은 list에서 pivot하나를 고르고, 해당 pivot을 기준으로 대소 비교를 하여 작은값은 pivot의 왼쪽에, 큰 값은 pivot의 오른쪽에 넣는 partition과정을 
 pivot을 제외한 모든 원소가 정렬될때 까지 수행합니다.
 
@@ -61,7 +71,7 @@ pivot을 제외한 모든 원소가 정렬될때 까지 수행합니다.
 
 ## Search
 
-* Binary search
+### Binary search
 
 정렬된 list내에서 어떤 data(target)를 찾을 때, 범위를 반씩 줄여가면서 탐색하는 방법입니다.
 
@@ -74,7 +84,10 @@ pivot을 제외한 모든 원소가 정렬될때 까지 수행합니다.
 
 3. 위 과정을 target 원소를 찾을 때까지, 또는 더 이상 비교할 수 있는 원소가 없을 때까지 반복합니다.
 
-* Hashed search
+<br>
+<br>
+
+### Hashed search
 
 어떤 원소(data)의 key값을 hash function을 이용하여 data의 위치와 mapping시킵니다. 따라서 이 key를 이용하여, 해당 target data의 위치(address)를 찾는 자료구조입니다.  
 
@@ -446,9 +459,9 @@ hash 구조를 생성하는 함수 hash_problem()과 hased search를 수행하�
 
 ## 출처 및 참고 문헌
 
-Merge sort : https://ko.wikipedia.org/wiki/%ED%95%A9%EB%B3%91_%EC%A0%95%EB%A0%AC , PPT 강의 자료
+Merge sort 이론 : https://ko.wikipedia.org/wiki/%ED%95%A9%EB%B3%91_%EC%A0%95%EB%A0%AC , PPT 강의 자료
 
-Quick sort : https://ko.wikipedia.org/wiki/%ED%80%B5_%EC%A0%95%EB%A0%AC , PPT 강의 자료
+Quick sort 이론 : https://ko.wikipedia.org/wiki/%ED%80%B5_%EC%A0%95%EB%A0%AC , PPT 강의 자료
 
-Hash : http://wiki.hash.kr/index.php/%ED%95%B4%EC%8B%9C , PPT 강의 자료
+Hash 이론 : http://wiki.hash.kr/index.php/%ED%95%B4%EC%8B%9C , PPT 강의 자료
 
