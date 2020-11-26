@@ -115,8 +115,6 @@ listsort_template.c
 
 ## hw3
 
-문제 설명
-
 [문세 설명 링크](https://github.com/junhardstudy/ProgrammingLanguage/blob/main/Algorithm_1/hw3/hw3_binary_search_tree_update_191102.txt)
 
 Binary Tree를 구현한 후, 과제에서 요구하는 형식으로 tree를 display합니다.
@@ -198,8 +196,6 @@ DP를 활용한 문제
 ***
 
 ## hw5
-
-문제 설명
 
 [문세 설명 링크](https://github.com/junhardstudy/ProgrammingLanguage/blob/main/Algorithm_1/hw5/hw5.pdf)
 
