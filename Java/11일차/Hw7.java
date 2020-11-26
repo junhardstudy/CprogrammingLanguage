@@ -28,12 +28,4 @@ class StringManipulate{
 		return str1+str2;
 	}
 	
-	static void sameDistinguish(String str1, String str2){
-	}
-	
-	
-	
-	
-	
-	
 }
