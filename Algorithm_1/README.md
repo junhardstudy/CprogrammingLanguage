@@ -54,6 +54,8 @@ Text input 파일로부터 데이터를 하나씩(순차적으로) 읽어 들일
 
 아래 함수들은 직접 작성한 코드이고, 그 외에는 교수님께 제공받은 template들입니다.
 
+***
+
 arraysort_template.c
 
 * void merge_sort( long A[], long Tmp[], int left, int right )
@@ -93,10 +95,11 @@ listsort_template.c
 
 * struct LNode* merget_list(struct LNode* left, struct LNode* right)
 
+<br>
+<br>
+
 ***
 
-<br>
-<br>
 
 ![result](./image/hw2_1.JPG)
 
@@ -113,6 +116,8 @@ listsort_template.c
 ## hw3
 
 문제 설명
+
+[문세 설명 링크]()
 
 Binary Tree를 구현한 후, 과제에서 요구하는 형식으로 tree를 display합니다.
 
@@ -174,15 +179,13 @@ void add_to_tail(struct BTNode** head, struct BTNode** tail, struct BTNode* elem
 
 DP를 활용한 문제
 
+[문세 설명 링크]()
+
 1. Knapsack 문제
 
-2. Knapsack with one item split 문제
+2. Knapsack with one item split 문제로서 하나의 물건(item)을 한번만 반으로 나누어서 배낭에 넣을 수 있는 경우입니다.
 
-하나의 물건(item)을 한번만 반으로 나누어서 배낭에 넣을 수 있는 경우입니다.
-
-3. Knapsack with one duplicate item 문제
-
-하나의 물건(item)을 2번 들고 갈 수 있는 경우입니다.
+3. Knapsack with one duplicate item 문제로서 하나의 물건(item)을 2번 들고 갈 수 있는 경우입니다.
 
 <br>
 <br>
@@ -197,6 +200,8 @@ DP를 활용한 문제
 ## hw5
 
 문제 설명
+
+[문세 설명 링크]()
 
 제한된 경로의 길이로 최대한 많은 점 방문하기.
 
