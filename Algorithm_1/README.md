@@ -29,34 +29,10 @@ Text input 파일로부터 데이터를 하나씩(순차적으로) 읽어 들일
  18 added at 1
 ```
 
-아래 함수들은 직접 작성한 코드이고, 그 외에는 교수님께 제공받은 template들입니다.
+아래 함수만 직접 작성한 코드이고, 그 외에는 교수님께 제공받은 template들입니다.
 
 * int add_value_for_binsearch( int A[], int loc, int val ) 
 
-```c
-int add_value_for_binsearch( int A[], int loc, int val ) 
-  // assumption: A[0]~A[loc-1] - sorted values
-  // find the location of val in A including A[loc]
-  // and re-order all the other values as well
-{
-	int i, j;//루프문 제어용 변수
-
-	if (loc == 0)A[0] = val;
-	else {
-		for (i = 0; i < loc; i++) {//값을 비교하기 위한 반복문
-			if (A[i] > val) {//배열에 넣으려는 데이터보다 더 큰 배열 요소를 찾으면
-				for (j = loc - 1; j >= i; j--)A[j+1] = A[j];
-				//데이터가 이미 들어있는 배열의 인덱스 끝에서부터 넣으려는 데이터가 들어갈
-				//인덱스 순까지 오른쪽으로 다 차례차례씩 밀기
-				break;
-			}
-		}
-		A[i] = val;
-		return i;
-	}
-	return 0;
-}
-```
 
 ![result](./image/result1.JPG)
 
@@ -72,17 +48,27 @@ int add_value_for_binsearch( int A[], int loc, int val )
 
 3. Merge sort를 linked list를 이용하여 구현.
 
+<br>
+<br>
+<br>
+
 아래 함수들은 직접 작성한 코드이고, 그 외에는 교수님께 제공받은 template들입니다.
 
 arraysort_template.c
 
 * void merge_sort( long A[], long Tmp[], int left, int right )
 
+<br>
+<br>
+
 ***
 
 heavy_arraysort_v2_template.c
 
 * void merge_sort_heavy( struct HLoad A[], struct HLoad Tmp[], int left, int right )
+
+<br>
+<br>
 
 ***
 
@@ -94,6 +80,11 @@ heavy_listsort_template.c
 
 * struct LHNode* merget_list(struct LHNode* left, struct LHNode* right)
 
+<br>
+<br>
+
+***
+
 listsort_template.c
 
 * struct LNode* list_insertion_sort(struct LNode* head)
@@ -103,6 +94,9 @@ listsort_template.c
 * struct LNode* merget_list(struct LNode* left, struct LNode* right)
 
 ***
+
+<br>
+<br>
 
 ![result](./image/hw2_1.JPG)
 
@@ -162,6 +156,10 @@ struct BTNode* partition_q(struct BTNode** left, struct BTNode** right, struct B
 void add_to_tail(struct BTNode** head, struct BTNode** tail, struct BTNode* element)
 ```
 
+<br>
+<br>
+<br>
+
 ![result](./image/hw3_1.JPG)
 
 ![result](./image/hw3_1_text.JPG)
@@ -174,7 +172,7 @@ void add_to_tail(struct BTNode** head, struct BTNode** tail, struct BTNode* elem
 
 ## hw4
 
-DP
+DP를 활용한 문제
 
 1. Knapsack 문제
 
@@ -185,6 +183,10 @@ DP
 3. Knapsack with one duplicate item 문제
 
 하나의 물건(item)을 2번 들고 갈 수 있는 경우입니다.
+
+<br>
+<br>
+<br>
 
 ![result](./image/hw4_input.JPG)
 
