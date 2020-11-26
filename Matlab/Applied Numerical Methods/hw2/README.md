@@ -7,7 +7,7 @@ July-August in Seattle, WA에서의 온도를 계산하는 3.4절 문제입니�
 
 ![result](./image/3_4.JPG)
 
-![result](./image/3_4S.JPG)
+![result](./image/3_4s.JPG)
 
 ![result](./image/3_4r.JPG)
 
@@ -45,7 +45,7 @@ Manning's equation을 이용하여 주어진 data에 대해 유속(velocity of w
 
 Hollow horizontal cylinder 모양의 원기둥을 엎어놓은 형태에서 liquid를 채울때 volume을 구하는 코드입니다.
 
-![result](./image/3_11eq.JPG)
+![result](./image/3.11eq.JPG)
 
 ![result](./image/3_11.JPG)
 
@@ -58,7 +58,7 @@ Hollow horizontal cylinder 모양의 원기둥을 엎어놓은 형태에서 liqu
 
 해당 norm을 매트랩 m파일로 작성하여 'A' matrix에 대해 계산하는 코드입니다.
 
-![result](./image/3_27eq.JPG)
+![result](./image/3.27eq.JPG)
 
 ![result](./image/3_27.JPG)
 
