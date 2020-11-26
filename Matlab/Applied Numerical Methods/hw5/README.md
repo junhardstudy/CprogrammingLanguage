@@ -43,7 +43,7 @@
 위와 같은 steady-state mass balance ofr a chemical in a one-dimensional canal에 대한 수식과 D, U, k, C(0), C(10)값이
 주어질때 x=0에서부터 10까지 미분방정식의 해를 구하고 x축을 거리로 하여 그래프를 plot 하는 코드입니다.
 
-![result](./image/handbykjg.png)
+![result](./image/handbykjg3.png)
 
 ![result](./image/9.12s.JPG)
 
