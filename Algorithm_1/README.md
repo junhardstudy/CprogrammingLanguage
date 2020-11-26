@@ -117,7 +117,7 @@ listsort_template.c
 
 문제 설명
 
-[문세 설명 링크]()
+[문세 설명 링크](https://github.com/junhardstudy/ProgrammingLanguage/blob/main/Algorithm_1/hw3/hw3_binary_search_tree_update_191102.txt)
 
 Binary Tree를 구현한 후, 과제에서 요구하는 형식으로 tree를 display합니다.
 
@@ -179,7 +179,7 @@ void add_to_tail(struct BTNode** head, struct BTNode** tail, struct BTNode* elem
 
 DP를 활용한 문제
 
-[문세 설명 링크]()
+[문세 설명 링크](https://github.com/junhardstudy/ProgrammingLanguage/blob/main/Algorithm_1/hw4/hw4_v2.pdf)
 
 1. Knapsack 문제
 
@@ -201,7 +201,7 @@ DP를 활용한 문제
 
 문제 설명
 
-[문세 설명 링크]()
+[문세 설명 링크](https://github.com/junhardstudy/ProgrammingLanguage/blob/main/Algorithm_1/hw5/hw5.pdf)
 
 제한된 경로의 길이로 최대한 많은 점 방문하기.
 
